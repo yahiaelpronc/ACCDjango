@@ -9,4 +9,5 @@ urlpatterns = [
     path('users-list/', views.usersList),
     path('users-list/<str:username>', views.getUser),
     path('users-delete/<str:username>', views.deleteUser),
+    path('insert/',insertuser)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

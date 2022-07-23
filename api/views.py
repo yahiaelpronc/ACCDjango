@@ -15,6 +15,14 @@ from .models import *
 #     }
 #     return Response(api_urls)
 
+@api_view(['POST'])
+def insertuser(request):
+    mydata=UsersSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+
 
 @api_view(['GET'])
 def usersList(request):
