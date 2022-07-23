@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='messages',
             name='date',
-            field=models.DateTimeField(default=datetime.datetime(2022, 7, 23, 1, 43, 33, 758059)),
+            field=models.DateTimeField(default=datetime.datetime(2022, 7, 23, 2, 6, 16, 908024)),
         ),
     ]
