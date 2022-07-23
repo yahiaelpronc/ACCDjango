@@ -7,42 +7,41 @@ from .models import *
 # Create your views here.
 
 
-# @api_view(['GET'])
-# def apiOverview(request):
-#     api_urls = {
-#         'List': '/task-list/',
-#         'Detail View': '/task-detail/<str:pk>',
-#     }
-#     return Response(api_urls)
-
 @api_view(['POST'])
 def insertuser(request):
-    mydata=UsersSerializer(data=request.data)
+    mydata = UsersSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
         return Response(mydata.data)
 
 
-@api_view(['GET'])
-def usersList(request):
-    users = Myuser.objects.all()
-    serializer = UsersSerializer(users, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def usersList(request):
+#     users = Myuser.objects.all()
+#     serializer = UsersSerializer(users, many=True)
+#     return Response(serializer.data)
 
 
-@api_view(['GET'])
-def getUser(request, username):
-    user = Myuser.objects.get(username=username)
-    serializer = UsersSerializer(user)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def getUser(request, username):
+#     user = Myuser.objects.get(username=username)
+#     serializer = UsersSerializer(user)
+#     return Response(serializer.data)
 
 
-@api_view(['DELETE'])
-def deleteUser(request, username):
-    user = Myuser.objects.get(username=username)
-    user.delete()
-    return Response('Item Successfully Deleted')
+# @api_view(['DELETE'])
+# def deleteUser(request, username):
+#     user = Myuser.objects.get(username=username)
+#     user.delete()
+#     return Response('Item Successfully Deleted')
+
+# @api_view(['GET'])
+# def apiOverview(request):
+#     api_urls = {
+#         'isVerified': True,
+#     }
+#     return Response(api_urls)
 
 
 # @api_view(['GET'])
