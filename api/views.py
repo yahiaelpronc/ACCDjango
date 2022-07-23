@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+from rest_framework import status
 # Create your views here.
 
 
@@ -14,7 +15,19 @@ def insertuser(request):
         mydata.save()
         print(mydata.data)
         return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['POST'])
+def insertVet(request):
+    mydata = VetSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 # @api_view(['GET'])
 # def usersList(request):
