@@ -8,26 +8,125 @@ from rest_framework import status
 # Create your views here.
 
 
+from django.core.mail import EmailMessage
+from django.conf import settings
+import json
+import smtplib
+import socket
+from datetime import date
+from datetime import datetime, timedelta
+from vars import *
+import re
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from django.db.models import Q
+
+
+
+# register user
 @api_view(['POST'])
 def insertuser(request):
     mydata = UsersSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
+        print(mydata.data['email'])
+        recepient=mydata.data['email']
+        sendEmail(request, recepient,resend=False,username=mydata.data['username'])
         return Response(mydata.data)
+        
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-
+# register vet
 @api_view(['POST'])
 def insertVet(request):
     mydata = VetSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
+        recepient=mydata.data['email']
+        sendEmail(request, recepient,resend=False,username=mydata.data['username'])
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+# 1 - get all location
+@api_view(['GET'])
+def listlocation(request):
+    mylocations=locations.objects.all()
+    locationdata=LocationsSerializer(mylocations,many=True)
+    return Response(locationdata.data)
+
+
+# 2 - get certain location details (id)
+
+@api_view(['GET'])
+def locationDetails(request,id):
+    mylocation=locations.objects.get(id=id)
+    if(mylocation != None):
+        locationdata=LocationsSerializer(mylocation)
+        return Response(locationdata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# 3 - get all users
+
+@api_view(['GET'])
+def listusers(request):
+    allusers=Myuser.objects.all()
+    if(len(allusers) != 0):
+        mydata=UsersSerializer(allusers,many=True)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# 4 - get certain user (username)
+
+@api_view(['GET'])
+def finduser(request,username):
+    myuser=Myuser.objects.get(username=username)
+    if(myuser != None):
+        mydata=UsersSerializer(myuser)
+        return Response(mydata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# 5 - get all vets
+
+@api_view(['GET'])
+def listVets(request):
+    allVets=Vet.objects.all()
+    if(len(allVets) != 0):
+        mydata=VetSerializer(allVets,many=True)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# 6 - get certain vet (vet_username)
+
+@api_view(['GET'])
+def findvet(request,username):
+    myvet=Vet.objects.get(username=username)
+    if(myvet != None):
+        mydata=VetSerializer(myvet)
+        return Response(mydata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+
 
 # @api_view(['GET'])
 # def usersList(request):
@@ -334,80 +433,80 @@ def insertVet(request):
 # #     server=smtplib.SMTP('smtp.gmail.com', 587)
 
 
-# def sendEmail(request, recepient, resend=False, username=None):
-#     socket.getaddrinfo('localhost', 8000)
-#     fromaddr = settings.EMAIL_HOST_USER
-#     toaddr = recepient
-#     server = smtplib.SMTP('smtp.gmail.com', 587)
+def sendEmail(request, recepient, resend=False, username=None):
+    socket.getaddrinfo('localhost', 8000)
+    fromaddr = settings.EMAIL_HOST_USER
+    toaddr = recepient
+    server = smtplib.SMTP('smtp.gmail.com', 587)
 
-#     server.connect("smtp.gmail.com", 587)
-#     server.ehlo()
-#     server.starttls()
-#     server.ehlo()
-#     server.login(fromaddr, varA)
-#     if(resend):
+    server.connect("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(fromaddr, varA)
+    if(resend):
 
-#         link = 'http://127.0.0.1:8000/verify/' + \
-#             request.POST['username'] + '/' + str(date.today())
-#         # myuser=Myuser.objects.get(username=username)
-#         # myuser.active_link=link
-#         # myuser.save()
-#         text = 'hello  '+username+'  please Verify your account here  ' + link
-#         subject = 'Animal Care Center Site 2022 By ITI  , ' + \
-#             request.POST['username']
-#         mailtext = 'subject : ' + subject+'\n\n'+text
-#         server.sendmail(fromaddr, toaddr, mailtext)
-#         server.quit()
-#         return True
-#     link = 'http://127.0.0.1:8000/verify/' + \
-#         request.POST['username'] + '/'+str(date.today())
-#     # myuser=Myuser.objects.get(username=req.POST['username'])
-#     # myuser.active_link=link
-#     # myuser.save()
-#     text = 'hello '+request.POST['username'] + \
-#         '  please Verify your account from here  '+link
-#     subject = 'Animal Care Center Site 2022 By ITI , '+request.POST['username']
-#     mailtext = 'subject : ' + subject + '\n\n' + text
-#     server.sendmail(fromaddr, toaddr, mailtext)
-#     server.quit()
+        link = 'http://127.0.0.1:8000/verify/' + \
+            username + '/' + str(date.today())
+        # myuser=Myuser.objects.get(username=username)
+        # myuser.active_link=link
+        # myuser.save()
+        text = 'hello  '+username+'  please Verify your account here  ' + link
+        subject = 'Animal Care Center Site 2022 By ITI  , ' + \
+            username
+        mailtext = 'subject : ' + subject+'\n\n'+text
+        server.sendmail(fromaddr, toaddr, mailtext)
+        server.quit()
+        return True
+    link = 'http://127.0.0.1:8000/verify/' + \
+        username + '/'+str(date.today())
+    # myuser=Myuser.objects.get(username=req.POST['username'])
+    # myuser.active_link=link
+    # myuser.save()
+    text = 'hello '+username + \
+        '  please Verify your account from here  '+link
+    subject = 'Animal Care Center Site 2022 By ITI , '+username
+    mailtext = 'subject : ' + subject + '\n\n' + text
+    server.sendmail(fromaddr, toaddr, mailtext)
+    server.quit()
 
 
-# def sendEmailVet(request, recepient, resend=False, username=None):
+def sendEmailVet(request, recepient, resend=False, username=None):
 
-#     socket.getaddrinfo('localhost', 8000)
-#     fromaddr = settings.EMAIL_HOST_USER
-#     toaddr = recepient
-#     server = smtplib.SMTP('smtp.gmail.com', 587)
-#     server.connect("smtp.gmail.com", 587)
-#     server.ehlo()
-#     server.starttls()
-#     server.ehlo()
-#     server.login(fromaddr, varA)
-#     if(resend):
+    socket.getaddrinfo('localhost', 8000)
+    fromaddr = settings.EMAIL_HOST_USER
+    toaddr = recepient
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.connect("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(fromaddr, varA)
+    if(resend):
 
-#         link = 'http://127.0.0.1:8000/verifyVet/' + \
-#             request.POST['username'] + '/' + str(date.today())
-#         # myuser=Myuser.objects.get(username=username)
-#         # myuser.active_link=link
-#         # myuser.save()
-#         text = 'hello  '+username+'  please Verify your account here  ' + link
-#         subject = 'Animal Care Center Site 2022 By ITI  , ' + \
-#             request.POST['username']
-#         mailtext = 'subject : ' + subject+'\n\n'+text
-#         server.sendmail(fromaddr, toaddr, mailtext)
-#         server.quit()
-#         return True
-#     link = 'http://127.0.0.1:8000/verifyVet/' + \
-#         request.POST['username'] + '/'+str(date.today())
-#     # myuser=Myuser.objects.get(username=req.POST['username'])
-#     # myuser.active_link=link
-#     # myuser.save()
-#     text = 'hello '+request.POST['username'] + \
-#         '  please Verify your account from here  '+link
-#     subject = 'Animal Care Center Site 2022 By ITI , '+request.POST['username']
-#     mailtext = 'subject : ' + subject + '\n\n' + text
-#     server.sendmail(fromaddr, toaddr, mailtext)
-#     server.quit()
+        link = 'http://127.0.0.1:8000/verifyVet/' + \
+            username+ '/' + str(date.today())
+        # myuser=Myuser.objects.get(username=username)
+        # myuser.active_link=link
+        # myuser.save()
+        text = 'hello  '+username+'  please Verify your account here  ' + link
+        subject = 'Animal Care Center Site 2022 By ITI  , ' + \
+           username
+        mailtext = 'subject : ' + subject+'\n\n'+text
+        server.sendmail(fromaddr, toaddr, mailtext)
+        server.quit()
+        return True
+    link = 'http://127.0.0.1:8000/verifyVet/' + \
+        username + '/'+str(date.today())
+    # myuser=Myuser.objects.get(username=req.POST['username'])
+    # myuser.active_link=link
+    # myuser.save()
+    text = 'hello '+username + \
+        '  please Verify your account from here  '+link
+    subject = 'Animal Care Center Site 2022 By ITI , '+username
+    mailtext = 'subject : ' + subject + '\n\n' + text
+    server.sendmail(fromaddr, toaddr, mailtext)
+    server.quit()
 
 
 # def registerUser(request):

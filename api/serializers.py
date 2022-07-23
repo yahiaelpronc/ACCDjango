@@ -11,7 +11,8 @@ class UsersSerializer(serializers.ModelSerializer):
 class VetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vet
-        fields = '__all__'
+        fields = ('username','profile_pic' ,'firstname','lastname','email','password','country','address','mobile','b_date',
+        'active_status','face_link','active_link','specialization',)
 
 
 class LocationsSerializer(serializers.ModelSerializer):
