@@ -22,6 +22,17 @@ from django.forms.models import model_to_dict
 from django.db.models import Q
 
 
+# Add Location
+@api_view(['POST'])
+def insertLocation(request):
+    mydata = LocationsSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 # register user
 @api_view(['POST'])
@@ -31,44 +42,46 @@ def insertuser(request):
         mydata.save()
         print(mydata.data)
         print(mydata.data['email'])
-        recepient=mydata.data['email']
-        sendEmail(request, recepient,resend=False,username=mydata.data['username'])
+        recepient = mydata.data['email']
+        sendEmail(request, recepient, resend=False,
+                  username=mydata.data['username'])
         return Response(mydata.data)
-        
+
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 # register vet
+
+
 @api_view(['POST'])
 def insertVet(request):
     mydata = VetSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
-        recepient=mydata.data['email']
-        sendEmail(request, recepient,resend=False,username=mydata.data['username'])
+        recepient = mydata.data['email']
+        sendEmail(request, recepient, resend=False,
+                  username=mydata.data['username'])
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 # 1 - get all location
 @api_view(['GET'])
 def listlocation(request):
-    mylocations=locations.objects.all()
-    locationdata=LocationsSerializer(mylocations,many=True)
+    mylocations = locations.objects.all()
+    locationdata = LocationsSerializer(mylocations, many=True)
     return Response(locationdata.data)
 
 
 # 2 - get certain location details (id)
 
 @api_view(['GET'])
-def locationDetails(request,id):
-    mylocation=locations.objects.get(id=id)
+def locationDetails(request, id):
+    mylocation = locations.objects.get(id=id)
     if(mylocation != None):
-        locationdata=LocationsSerializer(mylocation)
+        locationdata = LocationsSerializer(mylocation)
         return Response(locationdata.data)
 
     else:
@@ -76,22 +89,24 @@ def locationDetails(request,id):
 
 # 3 - get all users
 
+
 @api_view(['GET'])
 def listusers(request):
-    allusers=Myuser.objects.all()
+    allusers = Myuser.objects.all()
     if(len(allusers) != 0):
-        mydata=UsersSerializer(allusers,many=True)
+        mydata = UsersSerializer(allusers, many=True)
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 # 4 - get certain user (username)
 
+
 @api_view(['GET'])
-def finduser(request,username):
-    myuser=Myuser.objects.get(username=username)
+def finduser(request, username):
+    myuser = Myuser.objects.get(username=username)
     if(myuser != None):
-        mydata=UsersSerializer(myuser)
+        mydata = UsersSerializer(myuser)
         return Response(mydata.data)
 
     else:
@@ -102,30 +117,25 @@ def finduser(request,username):
 
 @api_view(['GET'])
 def listVets(request):
-    allVets=Vet.objects.all()
+    allVets = Vet.objects.all()
     if(len(allVets) != 0):
-        mydata=VetSerializer(allVets,many=True)
+        mydata = VetSerializer(allVets, many=True)
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 # 6 - get certain vet (vet_username)
 
+
 @api_view(['GET'])
-def findvet(request,username):
-    myvet=Vet.objects.get(username=username)
+def findvet(request, username):
+    myvet = Vet.objects.get(username=username)
     if(myvet != None):
-        mydata=VetSerializer(myvet)
+        mydata = VetSerializer(myvet)
         return Response(mydata.data)
 
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-
-
-
 
 
 # @api_view(['GET'])
@@ -485,13 +495,13 @@ def sendEmailVet(request, recepient, resend=False, username=None):
     if(resend):
 
         link = 'http://127.0.0.1:8000/verifyVet/' + \
-            username+ '/' + str(date.today())
+            username + '/' + str(date.today())
         # myuser=Myuser.objects.get(username=username)
         # myuser.active_link=link
         # myuser.save()
         text = 'hello  '+username+'  please Verify your account here  ' + link
         subject = 'Animal Care Center Site 2022 By ITI  , ' + \
-           username
+            username
         mailtext = 'subject : ' + subject+'\n\n'+text
         server.sendmail(fromaddr, toaddr, mailtext)
         server.quit()
