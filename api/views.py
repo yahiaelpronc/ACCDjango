@@ -21,6 +21,110 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.db.models import Q
 
+# register user
+
+
+@api_view(['GET'])
+def resendEmail(request, username):
+    myUser = Myuser.objects.filter(username=username).exists()
+    myVet = Vet.objects.filter(username=username).exists()
+    if(myUser):
+        myUser = Myuser.objects.get(username=username)
+        recepient = myUser.email
+        sendEmail(request, recepient, resend=True, username=myUser.username)
+        api_response = {
+            'didResend': True,
+        }
+        return Response(api_response)
+    if(myVet):
+        myVet = Vet.objects.get(username=username)
+        recepient = myVet.email
+        sendEmail(request, recepient, resend=True, username=myVet.username)
+        api_response = {
+            'didResend': True,
+        }
+        return Response(api_response)
+    return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def checkVerified(request, username):
+    myUser = Myuser.objects.filter(username=username).exists()
+    myVet = Vet.objects.filter(username=username).exists()
+    if(myUser):
+        myUser = Myuser.objects.get(username=username)
+        if(myUser.active_status):
+            api_response = {
+                'isActive': True,
+            }
+            return Response(api_response)
+        else:
+            api_response = {
+                'isActive': False,
+            }
+            return Response(api_response)
+    if(myVet):
+        myVet = Vet.objects.get(username=username)
+        if(myVet.active_status):
+            api_response = {
+                'isActive': True,
+            }
+        else:
+            api_response = {
+                'isActive': False,
+            }
+            return Response(api_response)
+    return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def loginVet(request, username, password):
+    myVet = Vet.objects.filter(username=username, password=password).exists()
+    if(myVet):
+        myVet = Vet.objects.get(username=username, password=password)
+        vetData = VetSerializer(myVet)
+        return Response(vetData.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def loginUser(request, username, password):
+    myuser = Myuser.objects.filter(
+        username=username, password=password).exists()
+    if(myuser):
+        myuser = Myuser.objects.get(username=username, password=password)
+        userData = UsersSerializer(myuser)
+        return Response(userData.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def listAnimals(request, username):
+    myAnimals = Animal.objects.filter(ownerUsername=username).exists()
+    if(myAnimals):
+        myAnimals = Animal.objects.filter(ownerUsername=username)
+        animalsData = AnimalSerializer(myAnimals, many=True)
+        return Response(animalsData.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# Add Location
+@api_view(['POST'])
+def insertAnimal(request):
+    mydata = AnimalSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 # Add Location
 @api_view(['POST'])

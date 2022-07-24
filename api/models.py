@@ -69,10 +69,11 @@ class Animal(models.Model):
     ownerUsername = models.CharField(max_length=30, null=False)
     weight = models.IntegerField(null=False)
     b_date = models.DateField(max_length=20, null=False)
+    picture = models.ImageField(null=True, blank=True)
     gender = models.CharField(
         max_length=30, null=False, choices=(('m', 'm'), ('f', 'f')))
     species = models.CharField(
-        max_length=30, null=False, choices=(('domestic', 'domestic'), ('wild', 'wild')))
+        max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
     female_state = models.CharField(
         max_length=30, null=True, blank=True, choices=(
             ('immature', 'immature'), ('mature&married', 'mature&married'), ('pregnant ', 'pregnant'), ('lactating', 'lactating')))
