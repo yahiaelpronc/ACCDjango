@@ -21,7 +21,36 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.db.models import Q
 
-# register user
+
+@api_view(['POST'])
+def addMessage(request):
+    mydata = MessagesSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def getAllMessages(request, sender, receiver):
+    # user = Myuser.objects.get(username=request.session['username'])
+    # vet = Vet.objects.get(username=request.session['vet_username'])
+    user = Myuser.objects.get(username=sender)
+    vet = Vet.objects.get(username=receiver)
+    Message = Messages.objects.filter(
+        Q(sender=vet.username) | Q(sender=user.username), Q(receiver=vet.username) | Q(receiver=user.username)).values()
+    Message = MessagesSerializer(Message, many=True)
+    return Response(Message.data)
+
+
+@api_view(['GET'])
+def logout(request):
+    request.session.clear()
+    api_response = {
+        'didResend': True,
+    }
+    return Response(api_response)
 
 
 @api_view(['GET'])
@@ -82,6 +111,7 @@ def loginVet(request, username, password):
     myVet = Vet.objects.filter(username=username, password=password).exists()
     if(myVet):
         myVet = Vet.objects.get(username=username, password=password)
+        request.session['vet_username'] = myVet.username
         vetData = VetSerializer(myVet)
         return Response(vetData.data)
 
@@ -95,6 +125,7 @@ def loginUser(request, username, password):
         username=username, password=password).exists()
     if(myuser):
         myuser = Myuser.objects.get(username=username, password=password)
+        request.session['username'] = myuser.username
         userData = UsersSerializer(myuser)
         return Response(userData.data)
 

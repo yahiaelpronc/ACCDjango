@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import datetime
 # Create your models here.
-now = datetime.now()
 
 
 class Myuser(models.Model):
@@ -61,7 +60,8 @@ class Messages(models.Model):
     content = models.CharField(max_length=300, null=False)
     sender = models.CharField(max_length=30, null=False)
     receiver = models.CharField(max_length=30, null=False)
-    date = models.DateTimeField(default=datetime.now())
+    date = models.CharField(
+        max_length=30, default=str(datetime.now().date()))
 
 
 class Animal(models.Model):
