@@ -91,7 +91,7 @@ class Medication(models.Model):
     dosageInterval = models.IntegerField(null=False)
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
         ('route1', 'route1'), ('route2', 'route2'), ('route3 ', 'route3')))
-    date = models.CharField(
+    date = models.CharField(null=True, blank=True,
         max_length=30, default=str(datetime.now().date()))
 
 
