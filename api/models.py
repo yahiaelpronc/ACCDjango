@@ -81,3 +81,30 @@ class Animal(models.Model):
     female_state = models.CharField(
         max_length=30, null=True, blank=True, choices=(
             ('immature', 'immature'), ('mature&married', 'mature&married'), ('pregnant ', 'pregnant'), ('lactating', 'lactating')))
+
+
+class Medication(models.Model):
+    animalName = models.CharField(max_length=30, null=False)
+    vetName = models.CharField(max_length=30, null=False)
+    medicationName = models.CharField(max_length=30, null=False)
+    dosage = models.IntegerField(null=False)
+    dosageInterval = models.IntegerField(null=False)
+    adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
+        ('route1', 'route1'), ('route2', 'route2'), ('route3 ', 'route3')))
+    date = models.CharField(
+        max_length=30, default=str(datetime.now().date()))
+
+
+class SurgicalOperationsRequest(models.Model):
+    animalName = models.CharField(max_length=30, null=False)
+    vetName = models.CharField(max_length=30, null=False)
+    message = models.CharField(max_length=300, null=False)
+    user = models.CharField(max_length=30, null=False)
+
+
+class SurgicalOperations(models.Model):
+    animalName = models.CharField(max_length=30, null=False)
+    vetName = models.CharField(max_length=30, null=False)
+    operationName = models.CharField(max_length=30, null=False)
+    date = models.CharField(max_length=30, null=False)
+    price = models.IntegerField(null=False)
