@@ -73,19 +73,22 @@ def getAllMessages(request, sender, receiver):
 
 
 @api_view(['GET'])
-def logout(request):
-    if(request.session.get('username') != None):
-        print("-----------------USER-----------------" +
-              request.session.get('username'))
-        myuser = Myuser.objects.get(username=request.session['username'])
-        myuser.isOnline = False
-        myuser.save()
-    if(request.session.get('vet_username') != None):
-        print("---------------VET-------------------" +
-              request.session.get('vet_username'))
-        myVet = Vet.objects.get(username=request.session['vet_username'])
-        myVet.isOnline = False
-        myVet.save()
+def logout(request, username):
+    myuser = Myuser.objects.get(username=username)
+    myuser.isOnline = False
+    myuser.save()
+    request.session.clear()
+    api_response = {
+        'didLogout': True,
+    }
+    return Response(api_response)
+
+
+@api_view(['GET'])
+def logoutVet(request, username):
+    myVet = Vet.objects.get(username=username)
+    myVet.isOnline = False
+    myVet.save()
     request.session.clear()
     api_response = {
         'didLogout': True,
