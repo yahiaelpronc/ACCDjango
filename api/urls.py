@@ -9,6 +9,8 @@ urlpatterns = [
     # path('users-list/', views.usersList),
     # path('users-list/<str:username>', views.getUser),
     # path('users-delete/<str:username>', views.deleteUser),
+    path('checkUserOnline/<str:username>', checkUserOnline),
+    path('checkVetOnline/<str:username>', checkVetOnline),
     path('addMessage/', addMessage),
     path('getAllMessages/<str:sender>/<str:receiver>', getAllMessages),
     path('logout/', logout),

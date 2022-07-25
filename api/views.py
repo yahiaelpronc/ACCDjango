@@ -22,6 +22,34 @@ from django.forms.models import model_to_dict
 from django.db.models import Q
 
 
+@api_view(['GET'])
+def checkUserOnline(request, username):
+    myUser = Myuser.objects.get(username=username)
+    if(myUser.isOnline):
+        api_response = {
+            'isOnline': True,
+        }
+        return Response(api_response)
+    api_response = {
+        'isOnline': False,
+    }
+    return Response(api_response)
+
+
+@api_view(['GET'])
+def checkVetOnline(request, username):
+    myVet = Vet.objects.get(username=username)
+    if(myVet.isOnline):
+        api_response = {
+            'isOnline': True,
+        }
+        return Response(api_response)
+    api_response = {
+        'isOnline': False,
+    }
+    return Response(api_response)
+
+
 @api_view(['POST'])
 def addMessage(request):
     mydata = MessagesSerializer(data=request.data)
@@ -46,9 +74,21 @@ def getAllMessages(request, sender, receiver):
 
 @api_view(['GET'])
 def logout(request):
+    if(request.session.get('username') != None):
+        print("-----------------USER-----------------" +
+              request.session.get('username'))
+        myuser = Myuser.objects.get(username=request.session['username'])
+        myuser.isOnline = False
+        myuser.save()
+    if(request.session.get('vet_username') != None):
+        print("---------------VET-------------------" +
+              request.session.get('vet_username'))
+        myVet = Vet.objects.get(username=request.session['vet_username'])
+        myVet.isOnline = False
+        myVet.save()
     request.session.clear()
     api_response = {
-        'didResend': True,
+        'didLogout': True,
     }
     return Response(api_response)
 
@@ -111,6 +151,8 @@ def loginVet(request, username, password):
     myVet = Vet.objects.filter(username=username, password=password).exists()
     if(myVet):
         myVet = Vet.objects.get(username=username, password=password)
+        myVet.isOnline = True
+        myVet.save()
         request.session['vet_username'] = myVet.username
         vetData = VetSerializer(myVet)
         return Response(vetData.data)
@@ -125,7 +167,10 @@ def loginUser(request, username, password):
         username=username, password=password).exists()
     if(myuser):
         myuser = Myuser.objects.get(username=username, password=password)
+        myuser.isOnline = True
+        myuser.save()
         request.session['username'] = myuser.username
+        print("----------------------------------"+request.session['username'])
         userData = UsersSerializer(myuser)
         return Response(userData.data)
 

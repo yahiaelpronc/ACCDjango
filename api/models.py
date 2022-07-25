@@ -18,6 +18,7 @@ class Myuser(models.Model):
     face_link = models.URLField(null=True)
     active_link = models.URLField(null=True)
     profile_pic = models.ImageField(null=True)
+    isOnline = models.BooleanField(default=False)
 
 
 class Vet(models.Model):
@@ -39,6 +40,7 @@ class Vet(models.Model):
                                                                            ('fishes and aquatics',
                                                                             'fishes and aquatics'),
                                                                            ('obstetrics and gynecology', 'obstetrics and gynecology')))
+    isOnline = models.BooleanField(default=False)
 
 
 class locations(models.Model):
