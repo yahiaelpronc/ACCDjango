@@ -190,7 +190,7 @@ def listAnimals(request, username):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-# Add Location
+# Add Animal
 @api_view(['POST'])
 def insertAnimal(request):
     mydata = AnimalSerializer(data=request.data)
@@ -217,6 +217,7 @@ def insertLocation(request):
 # register user
 @api_view(['POST'])
 def insertuser(request):
+    print("------------------API--------------------")
     mydata = UsersSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
