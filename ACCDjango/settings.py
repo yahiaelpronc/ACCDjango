@@ -153,7 +153,8 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/'
 MEDIA_ROOT = os.path.join(
-    'G:/Work/GithubRepos/new_ACC/acc-react/src/media/profileImages')
+    'D:/programming/ITI/ProjectITIFinal/acc-react/src/media/profileImages')
+    # D:/programming/ITI/ProjectITIFinal/
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media/profileImages')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

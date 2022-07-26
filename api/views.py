@@ -1,3 +1,4 @@
+from logging.handlers import MemoryHandler
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -20,6 +21,22 @@ import re
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.db.models import Q
+
+
+
+
+@api_view(['GET'])
+def findAnimals(request,ownerusername):
+    myAnimals=Animal.objects.filter(ownerUsername=ownerusername)
+    print(myAnimals)
+    if(len(myAnimals) != 0):
+        mydata=AnimalSerializer(myAnimals,many=True)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 @api_view(['GET'])
@@ -201,6 +218,98 @@ def insertAnimal(request):
         mydata.save()
         print(mydata.data)
         return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# addSurgeryRequest
+@api_view(['POST'])
+def insertRequest(request):
+    mydata = SurgicalOperationsRequestSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+# find an animal wth usrname and animal name
+
+
+
+@api_view(['GET'])
+def findSpecificAnimal(request,username,animalName):
+    myanimal=Animal.objects.get(animalName=animalName,ownerUsername=username)
+    print(myanimal)
+    if(myanimal != None):
+        mydata=AnimalSerializer(myanimal)
+        return Response(mydata.data)
+        print(mydata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+#get all requests depend on Vetusername
+
+@api_view(['GET'])
+def getRequests(request,VetUserName):
+    myrequests=SurgicalOperationsRequest.objects.filter(vetName=VetUserName)
+    if(len(myrequests) != 0):
+        mydata=SurgicalOperationsRequestSerializer(myrequests,many=True)
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def findRequest(request,id):
+    myrequest=SurgicalOperationsRequest.objects.get(id=id)
+    if(myrequest != None):
+        mydata=SurgicalOperationsRequestSerializer(myrequest)
+        return Response(mydata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# addSurgery
+@api_view(['POST'])
+def insertSurgry(request):
+    mydata = SurgicalOperationsSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# get A medication
+@api_view(['GET'])
+def getMedication(request,animalName):
+
+    myMedications=Medication.objects.filter(animalName=animalName)
+    if(len(myMedications) != 0):
+        mydata=MedicationSerializer(myMedications,many=True)
+        return Response(mydata.data)
+        print(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# get A Surgery
+@api_view(['GET'])
+def getSurgery(request,VetName):
+
+    mySurgeries=SurgicalOperations.objects.filter(vetName=VetName)
+    if(len(mySurgeries) != 0):
+        mydata=SurgicalOperationsSerializer(mySurgeries,many=True)
+        return Response(mydata.data)
+        print(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+
+from traitlets import default
 # Create your models here.
 
 
@@ -96,6 +98,7 @@ class Medication(models.Model):
 
 
 class SurgicalOperationsRequest(models.Model):
+    id = models.AutoField(primary_key=True)
     animalName = models.CharField(max_length=30, null=False)
     vetName = models.CharField(max_length=30, null=False)
     message = models.CharField(max_length=300, null=False)
@@ -103,7 +106,8 @@ class SurgicalOperationsRequest(models.Model):
 
 
 class SurgicalOperations(models.Model):
-    animalName = models.CharField(max_length=30, null=False)
+    animalName = models.CharField(max_length=30, null=True,blank=True)
+    owner = models.CharField(max_length=30, null=False,default='mostafamasrya')
     vetName = models.CharField(max_length=30, null=False)
     operationName = models.CharField(max_length=30, null=False)
     date = models.CharField(max_length=30, null=False)
