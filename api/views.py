@@ -251,7 +251,7 @@ def findSpecificAnimal(request, username, animalName):
     if(myanimal != None):
         mydata = AnimalSerializer(myanimal)
         return Response(mydata.data)
-        print(mydata.data)
+      
 
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)

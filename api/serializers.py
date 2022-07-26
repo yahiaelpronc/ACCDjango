@@ -48,3 +48,9 @@ class SurgicalOperationsSerializer(serializers.ModelSerializer):
         class Meta:
             model = SurgicalOperations
             fields = '__all__'
+
+
+class ServiseRequestSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = ServiseRequest
+            fields = '__all__'

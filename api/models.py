@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 
-from traitlets import default
+
 # Create your models here.
 
 
@@ -85,7 +85,7 @@ class Animal(models.Model):
     b_date = models.DateField(max_length=20, null=False)
     picture = models.ImageField(null=True, blank=True)
     gender = models.CharField(
-        max_length=30, null=False, choices=(('m', 'm'), ('f', 'f')))
+        max_length=30, null=False, choices=(('male', 'male'), ('female', 'female')))
     species = models.CharField(
         max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
     female_state = models.CharField(
@@ -102,7 +102,7 @@ class Medication(models.Model):
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
         ('route1', 'route1'), ('route2', 'route2'), ('route3 ', 'route3')))
     date = models.CharField(null=True, blank=True,
-                            max_length=30, default=str(datetime.now().date()))
+        max_length=30, default=str(datetime.now().date()))
 
 
 class SurgicalOperationsRequest(models.Model):
@@ -114,10 +114,24 @@ class SurgicalOperationsRequest(models.Model):
 
 
 class SurgicalOperations(models.Model):
-    animalName = models.CharField(max_length=30, null=True, blank=True)
-    owner = models.CharField(max_length=30, null=False,
-                             default='mostafamasrya')
+    animalName = models.CharField(max_length=30, null=True,blank=True)
+    owner = models.CharField(max_length=30, null=False)
     vetName = models.CharField(max_length=30, null=False)
     operationName = models.CharField(max_length=30, null=False)
     date = models.CharField(max_length=30, null=False)
     price = models.IntegerField(null=False)
+
+
+class ServiseRequest(models.Model):
+    locationName=models.CharField(max_length=30, null=True,blank=True)
+    serviceName=models.CharField(max_length=30, null=False)
+    locationOwner=models.CharField(max_length=30, null=False)
+    animalOwner=models.CharField(max_length=30, null=False)
+    price=models.IntegerField(null=False)
+    date = models.CharField(max_length=30, null=False)
+    time=models.IntegerField(null=False)
+    timePeriod=models.CharField(
+        max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
+    AnimalType = models.CharField(
+        max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
+    
