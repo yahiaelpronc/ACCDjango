@@ -52,6 +52,14 @@ class locations(models.Model):
     address = models.CharField(max_length=40, null=False)
     governorate = models.CharField(max_length=40, null=False)
     mobile = models.CharField(max_length=20, null=True, blank=True)
+    service = models.CharField(
+        max_length=30, null=False, choices=(('Wellness Exams & Vaccinations', 'Wellness Exams & Vaccinations'),
+                                            ('Boarding & Grooming Services',
+                                             'Boarding & Grooming Services'),
+                                            ('Animal Emergency Services',
+                                             'Animal Emergency Services')
+                                            ))
+    description = models.CharField(max_length=200, null=True, blank=True)
     website_link = models.URLField(null=True, blank=True)
     picture = models.ImageField(null=True, blank=True)
     work_hours_start = models.IntegerField(null=False)
@@ -94,7 +102,7 @@ class Medication(models.Model):
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
         ('route1', 'route1'), ('route2', 'route2'), ('route3 ', 'route3')))
     date = models.CharField(null=True, blank=True,
-        max_length=30, default=str(datetime.now().date()))
+                            max_length=30, default=str(datetime.now().date()))
 
 
 class SurgicalOperationsRequest(models.Model):
@@ -106,8 +114,9 @@ class SurgicalOperationsRequest(models.Model):
 
 
 class SurgicalOperations(models.Model):
-    animalName = models.CharField(max_length=30, null=True,blank=True)
-    owner = models.CharField(max_length=30, null=False,default='mostafamasrya')
+    animalName = models.CharField(max_length=30, null=True, blank=True)
+    owner = models.CharField(max_length=30, null=False,
+                             default='mostafamasrya')
     vetName = models.CharField(max_length=30, null=False)
     operationName = models.CharField(max_length=30, null=False)
     date = models.CharField(max_length=30, null=False)

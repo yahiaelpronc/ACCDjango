@@ -36,10 +36,14 @@ class MedicationSerializer(serializers.ModelSerializer):
         class Meta:
             model = Medication
             fields = '__all__'
+
+
 class SurgicalOperationsRequestSerializer(serializers.ModelSerializer):
         class Meta:
             model = SurgicalOperationsRequest
             fields = '__all__'
+
+            
 class SurgicalOperationsSerializer(serializers.ModelSerializer):
         class Meta:
             model = SurgicalOperations

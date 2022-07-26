@@ -23,20 +23,25 @@ from django.forms.models import model_to_dict
 from django.db.models import Q
 
 
+@api_view(['POST'])
+def addMedication(request):
+    mydata = MedicationSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        return Response(mydata.data)
+    else:
+        return Response(mydata.errors)
 
 
 @api_view(['GET'])
-def findAnimals(request,ownerusername):
-    myAnimals=Animal.objects.filter(ownerUsername=ownerusername)
+def findAnimals(request, ownerusername):
+    myAnimals = Animal.objects.filter(ownerUsername=ownerusername)
     print(myAnimals)
     if(len(myAnimals) != 0):
-        mydata=AnimalSerializer(myAnimals,many=True)
+        mydata = AnimalSerializer(myAnimals, many=True)
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 @api_view(['GET'])
@@ -222,6 +227,8 @@ def insertAnimal(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 # addSurgeryRequest
+
+
 @api_view(['POST'])
 def insertRequest(request):
     mydata = SurgicalOperationsRequestSerializer(data=request.data)
@@ -233,18 +240,16 @@ def insertRequest(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 # find an animal wth usrname and animal name
 
 
-
 @api_view(['GET'])
-def findSpecificAnimal(request,username,animalName):
-    myanimal=Animal.objects.get(animalName=animalName,ownerUsername=username)
+def findSpecificAnimal(request, username, animalName):
+    myanimal = Animal.objects.get(
+        animalName=animalName, ownerUsername=username)
     print(myanimal)
     if(myanimal != None):
-        mydata=AnimalSerializer(myanimal)
+        mydata = AnimalSerializer(myanimal)
         return Response(mydata.data)
         print(mydata.data)
 
@@ -252,25 +257,24 @@ def findSpecificAnimal(request,username,animalName):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
-#get all requests depend on Vetusername
+# get all requests depend on Vetusername
 
 @api_view(['GET'])
-def getRequests(request,VetUserName):
-    myrequests=SurgicalOperationsRequest.objects.filter(vetName=VetUserName)
+def getRequests(request, VetUserName):
+    myrequests = SurgicalOperationsRequest.objects.filter(vetName=VetUserName)
     if(len(myrequests) != 0):
-        mydata=SurgicalOperationsRequestSerializer(myrequests,many=True)
+        mydata = SurgicalOperationsRequestSerializer(myrequests, many=True)
         print(mydata.data)
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
-def findRequest(request,id):
-    myrequest=SurgicalOperationsRequest.objects.get(id=id)
+def findRequest(request, id):
+    myrequest = SurgicalOperationsRequest.objects.get(id=id)
     if(myrequest != None):
-        mydata=SurgicalOperationsRequestSerializer(myrequest)
+        mydata = SurgicalOperationsRequestSerializer(myrequest)
         return Response(mydata.data)
 
     else:
@@ -289,12 +293,14 @@ def insertSurgry(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 # get A medication
-@api_view(['GET'])
-def getMedication(request,animalName):
 
-    myMedications=Medication.objects.filter(animalName=animalName)
+
+@api_view(['GET'])
+def getMedication(request, animalName):
+
+    myMedications = Medication.objects.filter(animalName=animalName)
     if(len(myMedications) != 0):
-        mydata=MedicationSerializer(myMedications,many=True)
+        mydata = MedicationSerializer(myMedications, many=True)
         return Response(mydata.data)
         print(mydata.data)
     else:
@@ -303,11 +309,11 @@ def getMedication(request,animalName):
 
 # get A Surgery
 @api_view(['GET'])
-def getSurgery(request,VetName):
+def getSurgery(request, VetName):
 
-    mySurgeries=SurgicalOperations.objects.filter(vetName=VetName)
+    mySurgeries = SurgicalOperations.objects.filter(vetName=VetName)
     if(len(mySurgeries) != 0):
-        mydata=SurgicalOperationsSerializer(mySurgeries,many=True)
+        mydata = SurgicalOperationsSerializer(mySurgeries, many=True)
         return Response(mydata.data)
         print(mydata.data)
     else:
