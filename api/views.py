@@ -251,7 +251,6 @@ def findSpecificAnimal(request, username, animalName):
     if(myanimal != None):
         mydata = AnimalSerializer(myanimal)
         return Response(mydata.data)
-      
 
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -271,6 +270,7 @@ def getRequests(request, VetUserName):
 
 # get all Services requests depend on owner  name
 
+
 @api_view(['GET'])
 def getServicesRequests(request, locationOwner):
     myrequests = ServiseRequest.objects.filter(locationOwner=locationOwner)
@@ -283,6 +283,7 @@ def getServicesRequests(request, locationOwner):
 
 # get surgical operations Resposes for user by animal owner
 
+
 @api_view(['GET'])
 def getSurgicalResponses(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
@@ -294,21 +295,28 @@ def getSurgicalResponses(request, owner):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 # update status of surgery request by id
-@api_view(['PUT'])
-def updateRequestStatus(request,id):
-    myrequest=SurgicalOperationsRequest.objects.get(id=id)
-    mydata=SurgicalOperationsRequestSerializer(instance=myrequest,data=request.data)
-    if(mydata.is_valid()):
-        mydata.save()
-        return Response(mydata.data)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+@api_view(['POST'])
+def updateRequestStatus(request, id):
+    task = SurgicalOperationsRequest.objects.get(id=id)
+    serializer = SurgicalOperationsRequestUpdateSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
 
 
-
+# # update status of surgery request by id
+# @api_view(['POST'])
+# def updateRequestStatuss(request, id):
+#     myrequest = SurgicalOperationsRequest.objects.get(id=id)
+#     mydata = SurgicalOperationsRequestSerializer(
+#         instance=myrequest, data=request.data)
+#     if(mydata.is_valid()):
+#         mydata.save()
+#         return Response(mydata.data)
+#     else:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])

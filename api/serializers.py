@@ -33,29 +33,30 @@ class AnimalSerializer(serializers.ModelSerializer):
 
 
 class MedicationSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Medication
-            fields = '__all__'
+    class Meta:
+        model = Medication
+        fields = '__all__'
 
 
 class SurgicalOperationsRequestSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = SurgicalOperationsRequest
-            fields = '__all__'
+    class Meta:
+        model = SurgicalOperationsRequest
+        fields = '__all__'
 
-# class SurgicalOperationsRequestUpdateSerializer(serializers.ModelSerializer):
-#         class Meta:
-#             model = SurgicalOperationsRequest
-#             fields = ['status',]
 
-            
+class SurgicalOperationsRequestUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurgicalOperationsRequest
+        fields = ['status', ]
+
+
 class SurgicalOperationsSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = SurgicalOperations
-            fields = '__all__'
+    class Meta:
+        model = SurgicalOperations
+        fields = '__all__'
 
 
 class ServiseRequestSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = ServiseRequest
-            fields = '__all__'
+    class Meta:
+        model = ServiseRequest
+        fields = '__all__'
