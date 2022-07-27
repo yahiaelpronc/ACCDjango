@@ -60,7 +60,7 @@ class locations(models.Model):
                                              'Animal Emergency Services')
                                             ))
     description = models.CharField(max_length=200, null=True, blank=True)
-    website_link = models.URLField(null=True, blank=True)
+    website_link = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(null=True, blank=True)
     work_hours_start = models.IntegerField(null=False)
     work_hours_start_period = models.CharField(
