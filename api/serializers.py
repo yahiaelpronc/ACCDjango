@@ -43,6 +43,11 @@ class SurgicalOperationsRequestSerializer(serializers.ModelSerializer):
             model = SurgicalOperationsRequest
             fields = '__all__'
 
+# class SurgicalOperationsRequestUpdateSerializer(serializers.ModelSerializer):
+#         class Meta:
+#             model = SurgicalOperationsRequest
+#             fields = ['status',]
+
             
 class SurgicalOperationsSerializer(serializers.ModelSerializer):
         class Meta:

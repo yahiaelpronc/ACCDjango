@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 
 
+
 # Create your models here.
 
 
@@ -111,6 +112,10 @@ class SurgicalOperationsRequest(models.Model):
     vetName = models.CharField(max_length=30, null=False)
     message = models.CharField(max_length=300, null=False)
     user = models.CharField(max_length=30, null=False)
+    status = models.CharField(max_length=30, null=True, blank=True,default='bending', choices=(
+        ('accepted', 'accepted'), ('bending', 'bending'), ('dismissed', 'dismissed'),('declined ', 'declined')))
+    
+
 
 
 class SurgicalOperations(models.Model):
@@ -134,4 +139,9 @@ class ServiseRequest(models.Model):
         max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
     AnimalType = models.CharField(
         max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
+        
+    status = models.CharField(max_length=30, null=True, blank=True,default='bending', choices=(
+        ('accepted', 'accepted'), ('bending', 'bending'), ('dismissed', 'dismissed'),('declined ', 'declined')))
+    
+
     

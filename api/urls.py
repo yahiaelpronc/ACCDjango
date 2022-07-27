@@ -35,9 +35,12 @@ urlpatterns = [
     path('findvet/<str:username>/', findvet),
     path('findAnimals/<str:ownerusername>/', findAnimals),
     path('findRequest/<int:id>/', findRequest),
+    path('updateRequestStatus/<int:id>/', updateRequestStatus),
     path('getMedication/<str:animalName>/', getMedication),
     path('getSurgery/<str:VetName>/', getSurgery),
     path('findSpecificAnimal/<str:username>/<str:animalName>/', findSpecificAnimal),
     path('getRequests/<str:VetUserName>/', getRequests),
+    path('getServicesRequests/<str:locationOwner>/', getServicesRequests),
+    path('getSurgicalResponses/<str:owner>/', getSurgicalResponses),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
