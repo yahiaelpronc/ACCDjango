@@ -44,10 +44,15 @@ class SurgicalOperationsRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SurgicalOperationsRequestUpdateSerializer(serializers.ModelSerializer):
+class SurRequestStatusUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurgicalOperationsRequest
-        fields = ['dismissVet', ]
+        fields = ['statusUser', ]
+
+class SurRequestStatusVetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurgicalOperationsRequest
+        fields = ['statusVet', ]
 
 
 class SurgicalOperationsSerializer(serializers.ModelSerializer):

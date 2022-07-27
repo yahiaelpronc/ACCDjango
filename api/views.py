@@ -297,13 +297,25 @@ def getSurgicalResponses(request, owner):
 
 # update status of surgery request by id
 @api_view(['POST'])
-def updateRequestStatus(request, id):
+def updateRequestStatusUser(request, id):
     task = SurgicalOperationsRequest.objects.get(id=id)
-    serializer = SurgicalOperationsRequestUpdateSerializer(
+    serializer = SurRequestStatusUserSerializer(
         instance=task, data=request.data)
     if(serializer.is_valid()):
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['POST'])
+def updateRequestStatusVet(request, id):
+    task = SurgicalOperationsRequest.objects.get(id=id)
+    serializer = SurRequestStatusVetSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
+
+
+
 
 
 # # update status of surgery request by id
