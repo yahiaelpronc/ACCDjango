@@ -47,7 +47,7 @@ class SurgicalOperationsRequestSerializer(serializers.ModelSerializer):
 class SurgicalOperationsRequestUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurgicalOperationsRequest
-        fields = ['status', ]
+        fields = ['dismissVet', ]
 
 
 class SurgicalOperationsSerializer(serializers.ModelSerializer):

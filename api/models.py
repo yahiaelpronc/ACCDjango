@@ -2,7 +2,6 @@ from django.db import models
 from datetime import datetime
 
 
-
 # Create your models here.
 
 
@@ -103,7 +102,7 @@ class Medication(models.Model):
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
         ('route1', 'route1'), ('route2', 'route2'), ('route3 ', 'route3')))
     date = models.CharField(null=True, blank=True,
-        max_length=30, default=str(datetime.now().date()))
+                            max_length=30, default=str(datetime.now().date()))
 
 
 class SurgicalOperationsRequest(models.Model):
@@ -112,14 +111,14 @@ class SurgicalOperationsRequest(models.Model):
     vetName = models.CharField(max_length=30, null=False)
     message = models.CharField(max_length=300, null=False)
     user = models.CharField(max_length=30, null=False)
-    status = models.CharField(max_length=30, null=True, blank=True,default='bending', choices=(
-        ('accepted', 'accepted'), ('bending', 'bending'), ('dismissed', 'dismissed'),('declined ', 'declined')))
-    
-
+    dismissUser = models.BooleanField(default=False)
+    dismissVet = models.BooleanField(default=False)
+    status = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
 
 
 class SurgicalOperations(models.Model):
-    animalName = models.CharField(max_length=30, null=True,blank=True)
+    animalName = models.CharField(max_length=30, null=True, blank=True)
     owner = models.CharField(max_length=30, null=False)
     vetName = models.CharField(max_length=30, null=False)
     operationName = models.CharField(max_length=30, null=False)
@@ -128,20 +127,18 @@ class SurgicalOperations(models.Model):
 
 
 class ServiseRequest(models.Model):
-    locationName=models.CharField(max_length=30, null=True,blank=True)
-    serviceName=models.CharField(max_length=30, null=False)
-    locationOwner=models.CharField(max_length=30, null=False)
-    animalOwner=models.CharField(max_length=30, null=False)
-    price=models.IntegerField(null=False)
+    locationName = models.CharField(max_length=30, null=True, blank=True)
+    serviceName = models.CharField(max_length=30, null=False)
+    locationOwner = models.CharField(max_length=30, null=False)
+    animalOwner = models.CharField(max_length=30, null=False)
+    price = models.IntegerField(null=False)
     date = models.CharField(max_length=30, null=False)
-    time=models.IntegerField(null=False)
-    timePeriod=models.CharField(
+    time = models.IntegerField(null=False)
+    timePeriod = models.CharField(
         max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
     AnimalType = models.CharField(
         max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
-        
-    status = models.CharField(max_length=30, null=True, blank=True,default='bending', choices=(
-        ('accepted', 'accepted'), ('bending', 'bending'), ('dismissed', 'dismissed'),('declined ', 'declined')))
-    
-
-    
+    dismissUser = models.BooleanField(default=False)
+    dismissVet = models.BooleanField(default=False)
+    status = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
