@@ -100,16 +100,9 @@ class Medication(models.Model):
     dosage = models.IntegerField(null=False)
     dosageInterval = models.IntegerField(null=False)
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
-        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral ', 'Oral'), ('Sublingual ', 'Sublingual')
-        , ('Topical ', 'Topical'), ('Ocular ', 'Ocular'), ('Subcutaneous ', 'Subcutaneous')))
+        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral ', 'Oral'), ('Sublingual ', 'Sublingual'), ('Topical ', 'Topical'), ('Ocular ', 'Ocular'), ('Subcutaneous ', 'Subcutaneous')))
     date = models.CharField(null=True, blank=True,
                             max_length=30, default=str(datetime.now().date()))
-
-
-
-
-
-
 
 
 class SurgicalOperationsRequest(models.Model):
@@ -119,10 +112,10 @@ class SurgicalOperationsRequest(models.Model):
     message = models.CharField(max_length=300, null=False)
     user = models.CharField(max_length=30, null=False)
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 
 
 class SurgicalOperations(models.Model):
@@ -149,4 +142,4 @@ class ServiseRequest(models.Model):
     dismissUser = models.BooleanField(default=False)
     dismissVet = models.BooleanField(default=False)
     status = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))

@@ -173,24 +173,19 @@ def checkVerified(request, username):
 
 @api_view(['GET'])
 def loginVet(request, username, password):
-    myVet = Vet.objects.filter(username=username, password=password).exists()
-    if(myVet):
+    if(Vet.objects.filter(username=username, password=password).exists()):
         myVet = Vet.objects.get(username=username, password=password)
         myVet.isOnline = True
         myVet.save()
         request.session['vet_username'] = myVet.username
         vetData = VetSerializer(myVet)
         return Response(vetData.data)
-
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response("Incorrect Credintials")
 
 
 @api_view(['GET'])
 def loginUser(request, username, password):
-    myuser = Myuser.objects.filter(
-        username=username, password=password).exists()
-    if(myuser):
+    if(Myuser.objects.filter(username=username, password=password).exists()):
         myuser = Myuser.objects.get(username=username, password=password)
         myuser.isOnline = True
         myuser.save()
@@ -198,9 +193,7 @@ def loginUser(request, username, password):
         print("----------------------------------"+request.session['username'])
         userData = UsersSerializer(myuser)
         return Response(userData.data)
-
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response("Incorrect Credintials")
 
 
 @api_view(['GET'])
@@ -305,6 +298,7 @@ def updateRequestStatusUser(request, id):
         serializer.save()
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 def updateRequestStatusVet(request, id):
     task = SurgicalOperationsRequest.objects.get(id=id)
@@ -312,10 +306,11 @@ def updateRequestStatusVet(request, id):
         instance=task, data=request.data)
     if(serializer.is_valid()):
         serializer.save()
-    return Response(serializer.data)
-
-
-
+        return Response(serializer.data)
+    api_response = {
+        'isOnline': True,
+    }
+    return Response(api_response)
 
 
 # # update status of surgery request by id
@@ -398,6 +393,10 @@ def insertLocation(request):
 def insertuser(request):
     print("------------------API--------------------")
     mydata = UsersSerializer(data=request.data)
+    if(Myuser.objects.filter(username=request.data['username']).exists()):
+        return Response("Username Already Exists")
+    if(Myuser.objects.filter(email=request.data['email']).exists()):
+        return Response("Email Already Exists")
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
@@ -406,9 +405,8 @@ def insertuser(request):
         sendEmail(request, recepient, resend=False,
                   username=mydata.data['username'])
         return Response(mydata.data)
-
     else:
-        return Response(mydata.errors)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 # register vet
 
@@ -416,6 +414,12 @@ def insertuser(request):
 @api_view(['POST'])
 def insertVet(request):
     mydata = VetSerializer(data=request.data)
+    if(Vet.objects.filter(username=request.data['username']).exists()):
+        return Response("Username Already Exists")
+    if(Vet.objects.filter(email=request.data['email']).exists()):
+        return Response("Email Already Exists")
+    if(request.data['specialization'] == ""):
+        return Response("Specialization Field Is Required")
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
