@@ -396,7 +396,7 @@ def insertuser(request):
         return Response(mydata.data)
 
     else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(mydata.errors)
 
 # register vet
 

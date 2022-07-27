@@ -19,7 +19,7 @@ class Myuser(models.Model):
     active_status = models.BooleanField(default=False)
     face_link = models.CharField(max_length=100, null=True, blank=True)
     active_link = models.URLField(null=True)
-    profile_pic = models.ImageField(null=True)
+    profile_pic = models.ImageField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
 
 
@@ -36,7 +36,7 @@ class Vet(models.Model):
     active_status = models.BooleanField(default=False)
     face_link = models.CharField(max_length=100, null=True, blank=True)
     active_link = models.URLField(null=True, blank=True)
-    profile_pic = models.ImageField(null=False)
+    profile_pic = models.ImageField(null=True, blank=True)
     address = models.CharField(max_length=40, null=False)
     specialization = models.CharField(max_length=100, null=False, choices=(('poultry', 'poultry'), ('equine', 'equine'), ('ruminant', 'ruminant'),
                                                                            ('fishes and aquatics',
