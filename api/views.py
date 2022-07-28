@@ -173,24 +173,19 @@ def checkVerified(request, username):
 
 @api_view(['GET'])
 def loginVet(request, username, password):
-    myVet = Vet.objects.filter(username=username, password=password).exists()
-    if(myVet):
+    if(Vet.objects.filter(username=username, password=password).exists()):
         myVet = Vet.objects.get(username=username, password=password)
         myVet.isOnline = True
         myVet.save()
         request.session['vet_username'] = myVet.username
         vetData = VetSerializer(myVet)
         return Response(vetData.data)
-
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response("Incorrect Credintials")
 
 
 @api_view(['GET'])
 def loginUser(request, username, password):
-    myuser = Myuser.objects.filter(
-        username=username, password=password).exists()
-    if(myuser):
+    if(Myuser.objects.filter(username=username, password=password).exists()):
         myuser = Myuser.objects.get(username=username, password=password)
         myuser.isOnline = True
         myuser.save()
@@ -198,9 +193,7 @@ def loginUser(request, username, password):
         print("----------------------------------"+request.session['username'])
         userData = UsersSerializer(myuser)
         return Response(userData.data)
-
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response("Incorrect Credintials")
 
 
 @api_view(['GET'])
@@ -219,12 +212,23 @@ def listAnimals(request, username):
 @api_view(['POST'])
 def insertAnimal(request):
     mydata = AnimalSerializer(data=request.data)
+    if(Animal.objects.filter(animalName=request.data['animalName']).exists()):
+        return Response("An Animal Of Yours Already Has That Name")
+    if(request.data['gender'] == ""):
+        return Response("Please Choose A Gender")
+    if(request.data['gender'] == "female"):
+        print(request.data['female_state'])
+        if(request.data['female_state'] == ""):
+            return Response("Please Choose A Female State")
+    if(request.data['species'] == ""):
+        return Response("Please Choose A Species")
+
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
         return Response(mydata.data)
     else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(mydata.errors)
 
 # addSurgeryRequest
 
@@ -382,6 +386,11 @@ def updateRequestStatusVet(request, id):
 
 
 # update status service Request for User
+    #     return Response(serializer.data)
+    # api_response = {
+    #     'isOnline': True,
+    # }
+    # return Response(api_response)
 
 @api_view(['POST'])
 def updateSrviceStatusUser(request, id):
@@ -473,13 +482,30 @@ def getSurgery(request, VetName):
 # Add Location
 @api_view(['POST'])
 def insertLocation(request):
+    print(request.data)
+    if(request.data['work_hours_start'] == ""
+       or request.data['work_hours_end_period'] == ""
+       or request.data['work_hours_start_period'] == ""
+       or request.data['work_hours_start'] == ""):
+        return Response("Please Choose Work Hours")
+    print("1")
+    if(request.data['governorate'] == ""):
+        return Response("Please Choose A Governorate")
+    if(request.data['service'] == ""):
+        return Response("Please Choose A Service")
+    print("1")
+    if(locations.objects.filter(name=request.data['name']).exists()):
+        return Response("A Location With This Name Already Exists")
+    if(locations.objects.filter(email=request.data['email']).exists()):
+        return Response("Email Already Exists")
+    print("1")
     mydata = LocationsSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
         return Response(mydata.data)
     else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(mydata.errors)
 
 
 # register user
@@ -487,6 +513,10 @@ def insertLocation(request):
 def insertuser(request):
     print("------------------API--------------------")
     mydata = UsersSerializer(data=request.data)
+    if(Myuser.objects.filter(username=request.data['username']).exists()):
+        return Response("Username Already Exists")
+    if(Myuser.objects.filter(email=request.data['email']).exists()):
+        return Response("Email Already Exists")
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)
@@ -495,7 +525,6 @@ def insertuser(request):
         sendEmail(request, recepient, resend=False,
                   username=mydata.data['username'])
         return Response(mydata.data)
-
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -505,6 +534,12 @@ def insertuser(request):
 @api_view(['POST'])
 def insertVet(request):
     mydata = VetSerializer(data=request.data)
+    if(Vet.objects.filter(username=request.data['username']).exists()):
+        return Response("Username Already Exists")
+    if(Vet.objects.filter(email=request.data['email']).exists()):
+        return Response("Email Already Exists")
+    if(request.data['specialization'] == ""):
+        return Response("Specialization Field Is Required")
     if(mydata.is_valid()):
         mydata.save()
         print(mydata.data)

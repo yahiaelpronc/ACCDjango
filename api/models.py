@@ -19,7 +19,7 @@ class Myuser(models.Model):
     active_status = models.BooleanField(default=False)
     face_link = models.CharField(max_length=100, null=True, blank=True)
     active_link = models.URLField(null=True)
-    profile_pic = models.ImageField(null=True)
+    profile_pic = models.ImageField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
 
 
@@ -36,7 +36,7 @@ class Vet(models.Model):
     active_status = models.BooleanField(default=False)
     face_link = models.CharField(max_length=100, null=True, blank=True)
     active_link = models.URLField(null=True, blank=True)
-    profile_pic = models.ImageField(null=False)
+    profile_pic = models.ImageField(null=True, blank=True)
     address = models.CharField(max_length=40, null=False)
     specialization = models.CharField(max_length=100, null=False, choices=(('poultry', 'poultry'), ('equine', 'equine'), ('ruminant', 'ruminant'),
                                                                            ('fishes and aquatics',
@@ -61,7 +61,7 @@ class locations(models.Model):
                                              'Animal Emergency Services')
                                             ))
     description = models.CharField(max_length=200, null=True, blank=True)
-    website_link = models.URLField(null=True, blank=True)
+    website_link = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(null=True, blank=True)
     work_hours_start = models.IntegerField(null=False)
     work_hours_start_period = models.CharField(
@@ -101,16 +101,9 @@ class Medication(models.Model):
     dosage = models.IntegerField(null=False)
     dosageInterval = models.IntegerField(null=False)
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
-        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral ', 'Oral'), ('Sublingual ', 'Sublingual')
-        , ('Topical ', 'Topical'), ('Ocular ', 'Ocular'), ('Subcutaneous ', 'Subcutaneous')))
+        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral ', 'Oral'), ('Sublingual ', 'Sublingual'), ('Topical ', 'Topical'), ('Ocular ', 'Ocular'), ('Subcutaneous ', 'Subcutaneous')))
     date = models.CharField(null=True, blank=True,
                             max_length=30, default=str(datetime.now().date()))
-
-
-
-
-
-
 
 
 class SurgicalOperationsRequest(models.Model):
