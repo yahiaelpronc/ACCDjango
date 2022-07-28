@@ -268,12 +268,55 @@ def getRequests(request, VetUserName):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+# get request By User And Animal And Vet
+
+
+
+@api_view(['GET'])
+def getRequestByUserAndAnimalAndVet(request,user,animalName,vetname):
+    myrequest = SurgicalOperationsRequest.objects.get(user=user,animalName=animalName,vetName=vetname)
+    if(myrequest != None):
+        mydata = SurgicalOperationsRequestSerializer(myrequest)
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# get Requests related to username
+@api_view(['GET'])
+def getRequestByUsername(request,user):
+    myrequests = SurgicalOperationsRequest.objects.filter(user=user)
+    if(len(myrequests) != 0):
+        mydata = SurgicalOperationsRequestSerializer(myrequests, many=True)
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
 # get all Services requests depend on owner  name
 
 
 @api_view(['GET'])
 def getServicesRequests(request, locationOwner):
     myrequests = ServiseRequest.objects.filter(locationOwner=locationOwner)
+    if(len(myrequests) != 0):
+        mydata = ServiseRequestSerializer(myrequests, many=True)
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+# get all Services Responses depend on user  name
+
+
+@api_view(['GET'])
+def getServicesResponses(request, username):
+    myrequests = ServiseRequest.objects.filter(animalOwner=username)
     if(len(myrequests) != 0):
         mydata = ServiseRequestSerializer(myrequests, many=True)
         print(mydata.data)
@@ -305,6 +348,28 @@ def updateRequestStatusUser(request, id):
         serializer.save()
     return Response(serializer.data)
 
+
+# update status user of surgery Operation by id
+@api_view(['POST'])
+def updateOperationStatusUser(request, id):
+    task = SurgicalOperations.objects.get(id=id)
+    serializer = SurOprationStatusUserSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
+
+
+# update status vet of surgery Operation by id
+@api_view(['POST'])
+def updateOperationStatusVet(request, id):
+    task = SurgicalOperations.objects.get(id=id)
+    serializer = SurOperationStatusVetSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
+
 @api_view(['POST'])
 def updateRequestStatusVet(request, id):
     task = SurgicalOperationsRequest.objects.get(id=id)
@@ -316,7 +381,31 @@ def updateRequestStatusVet(request, id):
 
 
 
+# update status service Request for User
 
+@api_view(['POST'])
+def updateSrviceStatusUser(request, id):
+    task = ServiseRequest.objects.get(id=id)
+    serializer = ServiceStatusUserSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
+
+
+
+
+
+
+# update status service Request for Owner
+@api_view(['POST'])
+def updateSrviceStatusOwner(request, id):
+    task = ServiseRequest.objects.get(id=id)
+    serializer = ServiceStatusOwnerSerializer(
+        instance=task, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
 
 # # update status of surgery request by id
 # @api_view(['POST'])

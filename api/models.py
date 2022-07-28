@@ -48,6 +48,7 @@ class Vet(models.Model):
 class locations(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=30, null=False)
+    owner = models.CharField(unique=False, max_length=30, null=False)
     email = models.EmailField(unique=True, max_length=30, null=False)
     address = models.CharField(max_length=40, null=False)
     governorate = models.CharField(max_length=40, null=False)
@@ -119,10 +120,10 @@ class SurgicalOperationsRequest(models.Model):
     message = models.CharField(max_length=300, null=False)
     user = models.CharField(max_length=30, null=False)
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 
 
 class SurgicalOperations(models.Model):
@@ -132,6 +133,11 @@ class SurgicalOperations(models.Model):
     operationName = models.CharField(max_length=30, null=False)
     date = models.CharField(max_length=30, null=False)
     price = models.IntegerField(null=False)
+    statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+
+    statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 
 
 class ServiseRequest(models.Model):
@@ -146,7 +152,7 @@ class ServiseRequest(models.Model):
         max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
     AnimalType = models.CharField(
         max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
-    dismissUser = models.BooleanField(default=False)
-    dismissVet = models.BooleanField(default=False)
-    status = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
-        ('accepted', 'accepted'), ('pending', 'pending'), ('declined ', 'declined')))
+    statusOwner = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+    statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+        ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
