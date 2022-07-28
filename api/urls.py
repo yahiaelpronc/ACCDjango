@@ -14,6 +14,7 @@ urlpatterns = [
     path('checkUserOnline/<str:username>', checkUserOnline),
     path('checkVetOnline/<str:username>', checkVetOnline),
     path('addMessage/', addMessage),
+    path('getAllMessagesAssociated/<str:username>/', getAllMessagesAssociated),
     path('getAllMessages/<str:sender>/<str:receiver>', getAllMessages),
     path('logout/<str:username>', logout),
     path('logoutVet/<str:username>', logoutVet),

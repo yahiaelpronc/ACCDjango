@@ -100,13 +100,25 @@ def addMessage(request):
 
 
 @api_view(['GET'])
+def getAllMessagesAssociated(request, username):
+    Message = Messages.objects.filter(
+        Q(sender=username) | Q(receiver=username)).values()
+    Message = MessagesSerializer(Message, many=True)
+    return Response(Message.data)
+
+
+@api_view(['GET'])
 def getAllMessages(request, sender, receiver):
     # user = Myuser.objects.get(username=request.session['username'])
     # vet = Vet.objects.get(username=request.session['vet_username'])
-    user = Myuser.objects.get(username=sender)
-    vet = Vet.objects.get(username=receiver)
+    if(Myuser.objects.filter(username=sender).exists()):
+        user = Myuser.objects.get(username=sender)
+        user2 = Vet.objects.get(username=receiver)
+    else:
+        user = Vet.objects.get(username=sender)
+        user2 = Myuser.objects.get(username=receiver)
     Message = Messages.objects.filter(
-        Q(sender=vet.username) | Q(sender=user.username), Q(receiver=vet.username) | Q(receiver=user.username)).values()
+        Q(sender=user2.username) | Q(sender=user.username), Q(receiver=user2.username) | Q(receiver=user.username)).values()
     Message = MessagesSerializer(Message, many=True)
     return Response(Message.data)
 
@@ -622,9 +634,13 @@ def listVets(request):
 
 @api_view(['GET'])
 def findvet(request, username):
-    myvet = Vet.objects.get(username=username)
-    if(myvet != None):
+    if(Vet.objects.filter(username=username).exists()):
+        myvet = Vet.objects.get(username=username)
         mydata = VetSerializer(myvet)
+    else:
+        myvet = Myuser.objects.get(username=username)
+        mydata = UsersSerializer(myvet)
+    if(myvet != None):
         return Response(mydata.data)
 
     else:
