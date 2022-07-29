@@ -21,6 +21,7 @@ class Myuser(models.Model):
     active_link = models.URLField(null=True)
     profile_pic = models.ImageField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
+    isAdmin = models.BooleanField(default=False)
 
 
 class Vet(models.Model):
@@ -63,6 +64,7 @@ class locations(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     website_link = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(null=True, blank=True)
+    price = models.IntegerField(null=False)
     work_hours_start = models.IntegerField(null=False)
     work_hours_start_period = models.CharField(
         max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
@@ -101,7 +103,7 @@ class Medication(models.Model):
     dosage = models.IntegerField(null=False)
     dosageInterval = models.IntegerField(null=False)
     adminstrationRoute = models.CharField(max_length=30, null=True, blank=True, choices=(
-        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral ', 'Oral'), ('Sublingual ', 'Sublingual'), ('Topical ', 'Topical'), ('Ocular ', 'Ocular'), ('Subcutaneous ', 'Subcutaneous')))
+        ('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral', 'Oral'), ('Sublingual', 'Sublingual'), ('Topical', 'Topical'), ('Ocular', 'Ocular'), ('Subcutaneous', 'Subcutaneous')))
     date = models.CharField(null=True, blank=True,
                             max_length=30, default=str(datetime.now().date()))
 
@@ -114,7 +116,6 @@ class SurgicalOperationsRequest(models.Model):
     user = models.CharField(max_length=30, null=False)
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
-
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 

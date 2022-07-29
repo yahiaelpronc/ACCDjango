@@ -24,6 +24,20 @@ from django.db.models import Q
 from datetime import datetime, timedelta
 
 
+@api_view(['POST'])
+def insertServiceRequest(request):
+    if(request.data['AnimalType'] == ""):
+        return Response("Please Choose Animal Type")
+    if(request.data['timePeriod'] == ""):
+        return Response("Please Choose Time Period")
+    mydata = ServiseRequestSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['GET'])
 def verify(request, username):
     myUser = Myuser.objects.filter(username=username).exists()
@@ -357,10 +371,21 @@ def getServicesResponses(request, username):
 
 
 @api_view(['GET'])
-def getSurgicalResponses(request, owner):
+def getSurgicalOperations(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
     if(len(myResponses) != 0):
         mydata = SurgicalOperationsSerializer(myResponses, many=True)
+        print(mydata.data)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def getSurgicalResponses(request, owner):
+    myResponses = SurgicalOperationsRequest.objects.filter(user=owner)
+    if(len(myResponses) != 0):
+        mydata = SurgicalOperationsRequestSerializer(myResponses, many=True)
         print(mydata.data)
         return Response(mydata.data)
     else:
@@ -526,7 +551,7 @@ def insertLocation(request):
         print(mydata.data)
         return Response(mydata.data)
     else:
-        return Response(mydata.errors)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 # register user

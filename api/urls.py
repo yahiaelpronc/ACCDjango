@@ -9,6 +9,7 @@ urlpatterns = [
     # path('users-list/', views.usersList),
     # path('users-list/<str:username>', views.getUser),
     # path('users-delete/<str:username>', views.deleteUser),
+    path('insertServiceRequest/', insertServiceRequest),
     path('verify/<str:username>/', verify),
     path('addMedication/', addMedication),
     path('checkUserOnline/<str:username>', checkUserOnline),
@@ -53,5 +54,6 @@ urlpatterns = [
     path('getServicesRequests/<str:locationOwner>/', getServicesRequests),
     path('getServicesResponses/<str:username>/', getServicesResponses),
     path('getSurgicalResponses/<str:owner>/', getSurgicalResponses),
+    path('getSurgicalOperations/<str:owner>/', getSurgicalOperations),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
