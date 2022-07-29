@@ -275,9 +275,9 @@ def insertRequest(request):
 
 
 @api_view(['GET'])
-def findSpecificAnimal(request, username, animalName):
+def findSpecificAnimal(request, animalName):
     myanimal = Animal.objects.get(
-        animalName=animalName, ownerUsername=username)
+        animalName=animalName)
     print(myanimal)
     if(myanimal != None):
         mydata = AnimalSerializer(myanimal)

@@ -45,7 +45,7 @@ urlpatterns = [
     path('updateOperationStatusVet/<int:id>/', updateOperationStatusVet),
     path('getMedication/<str:animalName>/', getMedication),
     path('getSurgery/<str:VetName>/', getSurgery),
-    path('findSpecificAnimal/<str:username>/<str:animalName>/', findSpecificAnimal),
+    path('findSpecificAnimal/<str:animalName>/', findSpecificAnimal),
     path('getRequests/<str:VetUserName>/', getRequests),
     path('getRequestByUserAndAnimalAndVet/<str:user>/<str:animalName>/<str:vetname>/',
          getRequestByUserAndAnimalAndVet),
