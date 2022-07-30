@@ -89,3 +89,10 @@ class ServiceStatusOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiseRequest
         fields = ['statusOwner', ]
+
+
+
+class SurOperationVetUpdatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurgicalOperations
+        fields = ['statusVet','operationName','date','price', ]

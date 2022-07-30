@@ -462,6 +462,18 @@ def updateSrviceStatusOwner(request, id):
         serializer.save()
     return Response(serializer.data)
 
+
+#updates of vet data about Surgery
+@api_view(['POST'])
+def SurVetUpdates(request, id):
+    mySurgery = SurgicalOperations.objects.get(id=id)
+    serializer = SurOperationVetUpdatesSerializer(
+        instance=mySurgery, data=request.data)
+    if(serializer.is_valid()):
+        serializer.save()
+    return Response(serializer.data)
+
+
 # # update status of surgery request by id
 # @api_view(['POST'])
 # def updateRequestStatuss(request, id):
@@ -473,6 +485,20 @@ def updateSrviceStatusOwner(request, id):
 #         return Response(mydata.data)
 #     else:
 #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+# find surgery using id
+
+
+@api_view(['GET'])
+def findSurgery(request, id):
+    mysurgery = SurgicalOperations.objects.get(id=id)
+    if(mysurgery != None):
+        mydata = SurgicalOperationsSerializer(mysurgery)
+        return Response(mydata.data)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 
 @api_view(['GET'])
