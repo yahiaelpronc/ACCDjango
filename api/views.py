@@ -591,14 +591,14 @@ def insertuser(request):
         return Response("Username Already Exists")
     if(Myuser.objects.filter(email=request.data['email']).exists()):
         return Response("Email Already Exists")
+    if(request.data['governorate'] == ""):
+        return Response("Please Choose A Governorate")
     if(mydata.is_valid()):
-        mydata.save()
-        print(mydata.data)
-        print(mydata.data['email'])
-        recepient = mydata.data['email']
-        sendEmail(request, recepient, resend=False,
-                  username=mydata.data['username'])
-        return Response(mydata.data)
+        recepient = request.data['email']
+        if(sendEmail(request, recepient, resend=False, username=request.data['username'])):
+            mydata.save()
+            return Response(mydata.data)
+        return Response("Email Not Valid")
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -615,12 +615,11 @@ def insertVet(request):
     if(request.data['specialization'] == ""):
         return Response("Specialization Field Is Required")
     if(mydata.is_valid()):
-        mydata.save()
-        print(mydata.data)
-        recepient = mydata.data['email']
-        sendEmail(request, recepient, resend=False,
-                  username=mydata.data['username'])
-        return Response(mydata.data)
+        recepient = request.data['email']
+        if(sendEmail(request, recepient, resend=False, username=request.data['username'])):
+            mydata.save()
+            return Response(mydata.data)
+        return Response("Email Not Valid")
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -715,10 +714,12 @@ def sendEmail(request, recepient, resend=False, username=None):
     server = smtplib.SMTP('smtp.gmail.com', 587)
 
     server.connect("smtp.gmail.com", 587)
+    print("CONNECTED")
     server.ehlo()
     server.starttls()
     server.ehlo()
     server.login(fromaddr, varA)
+    print("LOGGED IN")
     if(resend):
 
         link = 'http://localhost:8000/api/verify/' + \
@@ -742,8 +743,12 @@ def sendEmail(request, recepient, resend=False, username=None):
         '  please Verify your account from here  '+link
     subject = 'Animal Care Center Site 2022 By ITI , '+username
     mailtext = 'subject : ' + subject + '\n\n' + text
+    print("BEFORE SEND")
     server.sendmail(fromaddr, toaddr, mailtext)
+    print("AFTER SEND")
     server.quit()
+    print("Quit")
+    return True
 
 
 def sendEmailVet(request, recepient, resend=False, username=None):
