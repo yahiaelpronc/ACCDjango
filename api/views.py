@@ -697,10 +697,6 @@ def findvet(request, username):
     if(Vet.objects.filter(username=username).exists()):
         myvet = Vet.objects.get(username=username)
         mydata = VetSerializer(myvet)
-    else:
-        myvet = Myuser.objects.get(username=username)
-        mydata = UsersSerializer(myvet)
-    if(myvet != None):
         return Response(mydata.data)
 
     else:
