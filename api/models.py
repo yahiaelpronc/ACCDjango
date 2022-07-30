@@ -22,6 +22,7 @@ class Myuser(models.Model):
     profile_pic = models.ImageField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
     isAdmin = models.BooleanField(default=False)
+    isOwner = models.BooleanField(default=False)
 
 
 class Vet(models.Model):
@@ -44,6 +45,7 @@ class Vet(models.Model):
                                                                             'fishes and aquatics'),
                                                                            ('obstetrics and gynecology', 'obstetrics and gynecology')))
     isOnline = models.BooleanField(default=False)
+    isOwner = models.BooleanField(default=False)
 
 
 class locations(models.Model):
@@ -64,7 +66,7 @@ class locations(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     website_link = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(null=True, blank=True)
-    price = models.IntegerField(null=False,default=0)
+    price = models.IntegerField(null=False, default=0)
     work_hours_start = models.IntegerField(null=False)
     work_hours_start_period = models.CharField(
         max_length=2, null=False, choices=(('am', 'am'), ('pm', 'pm')))
@@ -124,11 +126,11 @@ class SurgicalOperations(models.Model):
     animalName = models.CharField(max_length=30, null=True, blank=True)
     owner = models.CharField(max_length=30, null=False)
     vetName = models.CharField(max_length=30, null=False)
-    operationName = models.CharField(max_length=30, null=False,default="")
-    date = models.CharField(max_length=30, null=False,default="")
-    price = models.IntegerField(null=False,default=0)
+    operationName = models.CharField(max_length=30, null=False, default="")
+    date = models.CharField(max_length=30, null=False, default="")
+    price = models.IntegerField(null=False, default=0)
 
-    message = models.CharField(max_length=300, null=False,default="")
+    message = models.CharField(max_length=300, null=False, default="")
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
 

@@ -10,17 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-
-        migrations.AddField(
-            model_name='locations',
-            name='price',
-            field=models.IntegerField(default=0),
-        ),
-        migrations.AddField(
-            model_name='myuser',
-            name='isAdmin',
-            field=models.BooleanField(default=False),
-        ),
         migrations.AddField(
             model_name='surgicaloperations',
             name='message',
@@ -29,12 +18,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='medication',
             name='adminstrationRoute',
-            field=models.CharField(blank=True, choices=[('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral', 'Oral'), ('Sublingual', 'Sublingual'), ('Topical', 'Topical'), ('Ocular', 'Ocular'), ('Subcutaneous', 'Subcutaneous')], max_length=30, null=True),
+            field=models.CharField(blank=True, choices=[('Intramascular', 'Intramascular'), ('Intravenous', 'Intravenous'), ('Oral', 'Oral'), (
+                'Sublingual', 'Sublingual'), ('Topical', 'Topical'), ('Ocular', 'Ocular'), ('Subcutaneous', 'Subcutaneous')], max_length=30, null=True),
         ),
         migrations.AlterField(
             model_name='medication',
             name='date',
-            field=models.CharField(blank=True, default='2022-07-29', max_length=30, null=True),
+            field=models.CharField(
+                blank=True, default='2022-07-29', max_length=30, null=True),
         ),
         migrations.AlterField(
             model_name='messages',

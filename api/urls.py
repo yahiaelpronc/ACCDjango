@@ -31,6 +31,7 @@ urlpatterns = [
     path('insertRequest/', insertRequest),
     path('insertSurgry/', insertSurgry),
     path('listlocation/', listlocation),
+    path('listservices/', listservices),
     path('locationDetails/<int:id>/', locationDetails),
     path('listusers/', listusers),
     path('listvets/', listVets),

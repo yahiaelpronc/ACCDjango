@@ -463,7 +463,7 @@ def updateSrviceStatusOwner(request, id):
     return Response(serializer.data)
 
 
-#updates of vet data about Surgery
+# updates of vet data about Surgery
 @api_view(['POST'])
 def SurVetUpdates(request, id):
     mySurgery = SurgicalOperations.objects.get(id=id)
@@ -498,7 +498,6 @@ def findSurgery(request, id):
 
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 
 @api_view(['GET'])
@@ -574,6 +573,9 @@ def insertLocation(request):
     mydata = LocationsSerializer(data=request.data)
     if(mydata.is_valid()):
         mydata.save()
+        myUser = Myuser.objects.get(username=request.data['owner'])
+        myUser.isOwner = True
+        myUser.save()
         print(mydata.data)
         return Response(mydata.data)
     else:
@@ -621,6 +623,14 @@ def insertVet(request):
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# 1 - get all location
+@api_view(['GET'])
+def listservices(request):
+    mylocations = ServiseRequest.objects.all()
+    locationdata = ServiseRequestSerializer(mylocations, many=True)
+    return Response(locationdata.data)
 
 
 # 1 - get all location
