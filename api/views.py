@@ -22,6 +22,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.db.models import Q
 from datetime import datetime, timedelta
+from django.shortcuts import redirect
 
 
 @api_view(['POST'])
@@ -46,12 +47,13 @@ def verify(request, username):
         myUser = Myuser.objects.get(username=username)
         myUser.active_status = True
         myUser.save()
-        return Response("User Verified")
+        return redirect("http://localhost:3000/verified")
     if(myVet):
         myVet = Vet.objects.get(username=username)
         myVet.active_status = True
         myVet.save()
-        return Response("Vet Verified")
+        return redirect("http://localhost:3000/verified")
+    return redirect("http://localhost:3000/Notverified")
 
 
 @api_view(['POST'])
