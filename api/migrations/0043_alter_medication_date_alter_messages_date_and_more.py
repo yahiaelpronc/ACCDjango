@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='medication',
             name='date',
-            field=models.CharField(blank=True, default='2022-07-28', max_length=30, null=True),
+            field=models.CharField(
+                blank=True, default='2022-07-28', max_length=30, null=True),
         ),
         migrations.AlterField(
             model_name='messages',
@@ -23,11 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='serviserequest',
             name='statusOwner',
-            field=models.CharField(blank=True, choices=[('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')], default='pending', max_length=30, null=True),
-        ),
-        migrations.AlterField(
-            model_name='serviserequest',
-            name='statusUser',
-            field=models.CharField(blank=True, choices=[('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')], default='pending', max_length=30, null=True),
+            field=models.CharField(blank=True, choices=[('accepted', 'accepted'), ('pending', 'pending'), (
+                'declined', 'declined')], default='pending', max_length=30, null=True),
         ),
     ]
