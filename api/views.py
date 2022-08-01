@@ -20,9 +20,35 @@ from vars import *
 import re
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
-from django.db.models import Q
+from django.db.models import Q, Count
 from datetime import datetime, timedelta
 from django.shortcuts import redirect
+
+
+@api_view(['DELETE'])
+def deleteNotifications(request, username, type):
+    Notifications.objects.filter(receiver=username, type=type).delete()
+    return Response('Notifications Successfully Deleted')
+
+
+@api_view(['POST'])
+def insertNotifications(request):
+    mydata = NotificationsSerializer(data=request.data)
+    if(mydata.is_valid()):
+        mydata.save()
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def countNotifications(request, username):
+    notifications = Notifications.objects.filter(receiver=username)
+    if(notifications):
+        mydata = NotificationsSerializer(notifications, many=True)
+        return Response(mydata.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
