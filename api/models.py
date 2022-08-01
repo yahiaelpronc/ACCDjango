@@ -154,3 +154,10 @@ class ServiseRequest(models.Model):
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='accepted', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+
+
+class Notifications(models.Model):
+    receiver = models.CharField(max_length=30, null=False)
+    type = models.CharField(
+        max_length=30, null=False, choices=(('service', 'service'), ('medication', 'medication'), ('surgery', 'surgery')))
+    message = models.CharField(max_length=300, default="")
