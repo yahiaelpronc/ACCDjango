@@ -53,7 +53,7 @@ class SurRequestStatusUserSerializer(serializers.ModelSerializer):
 class SurOprationStatusUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurgicalOperations
-        fields = ['statusUser', ]
+        fields = ['statusUser', 'reasonUser',]
 
 
 class SurRequestStatusVetSerializer(serializers.ModelSerializer):
@@ -65,7 +65,7 @@ class SurRequestStatusVetSerializer(serializers.ModelSerializer):
 class SurOperationStatusVetSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurgicalOperations
-        fields = ['statusVet', ]
+        fields = ['statusVet', 'reasonVet',]
 
 
 class SurgicalOperationsSerializer(serializers.ModelSerializer):
@@ -83,13 +83,13 @@ class ServiseRequestSerializer(serializers.ModelSerializer):
 class ServiceStatusUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiseRequest
-        fields = ['statusUser', ]
+        fields = ['statusUser', 'reasonUser',]
 
 
 class ServiceStatusOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiseRequest
-        fields = ['statusOwner', ]
+        fields = ['statusOwner','reasonVet' ,]
 
 
 class SurOperationVetUpdatesSerializer(serializers.ModelSerializer):

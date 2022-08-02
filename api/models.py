@@ -136,6 +136,8 @@ class SurgicalOperations(models.Model):
 
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+    reasonUser=models.CharField(max_length=300, null=False, default="")
+    reasonVet=models.CharField(max_length=300, null=False, default="")
 
 
 class ServiseRequest(models.Model):
@@ -154,6 +156,8 @@ class ServiseRequest(models.Model):
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='accepted', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+    reasonUser=models.CharField(max_length=300, null=False, default="")
+    reasonVet=models.CharField(max_length=300, null=False, default="")
 
 
 class Notifications(models.Model):

@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+
 from rest_framework import status
 # Create your views here.
 
@@ -434,7 +435,22 @@ def updateRequestStatusUser(request, id):
 # update status user of surgery Operation by id
 @api_view(['POST'])
 def updateOperationStatusUser(request, id):
+    mydate = datetime.now()
+    myyear=mydate.year
+    mymonth=mydate.month
+    myday=mydate.day
     task = SurgicalOperations.objects.get(id=id)
+    thisdate=task.date
+    thisyear=thisdate.split("-")[0]
+    thismonth=thisdate.split("-")[1]
+    thisday=thisdate.split("-")[2]
+    yearDiff=int(thisyear)-myyear
+    monthDiff=int(thismonth)-mymonth
+    dayDiff=int(thisday)-myday
+    if(yearDiff == 0 or monthDiff == 0 or dayDiff == 0):
+        print("errrrrrrrror")
+        return Response("you cant decline before 24 hours")
+
     serializer = SurOprationStatusUserSerializer(
         instance=task, data=request.data)
     if(serializer.is_valid()):
@@ -445,14 +461,28 @@ def updateOperationStatusUser(request, id):
 # update status vet of surgery Operation by id
 @api_view(['POST'])
 def updateOperationStatusVet(request, id):
+    mydate = datetime.now()
+    myyear=mydate.year
+    mymonth=mydate.month
+    myday=mydate.day
     task = SurgicalOperations.objects.get(id=id)
+    thisdate=task.date
+    thisyear=thisdate.split("-")[0]
+    thismonth=thisdate.split("-")[1]
+    thisday=thisdate.split("-")[2]
+    yearDiff=int(thisyear)-myyear
+    monthDiff=int(thismonth)-mymonth
+    dayDiff=int(thisday)-myday
+    if(yearDiff == 0 or monthDiff == 0 or dayDiff == 0):
+        print("errrrrrrrror")
+        return Response("you cant decline before 24 hours")
     serializer = SurOperationStatusVetSerializer(
         instance=task, data=request.data)
     if(serializer.is_valid()):
         serializer.save()
     return Response(serializer.data)
 
-# 1
+
 @api_view(['POST'])
 def updateRequestStatusVet(request, id):
     task = SurgicalOperationsRequest.objects.get(id=id)
@@ -483,6 +513,7 @@ def updateSrviceStatusUser(request, id):
 # update status service Request for Owner
 @api_view(['POST'])
 def updateSrviceStatusOwner(request, id):
+  
     task = ServiseRequest.objects.get(id=id)
     serializer = ServiceStatusOwnerSerializer(
         instance=task, data=request.data)
