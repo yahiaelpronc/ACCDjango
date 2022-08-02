@@ -452,7 +452,7 @@ def updateOperationStatusVet(request, id):
         serializer.save()
     return Response(serializer.data)
 
-
+# 1
 @api_view(['POST'])
 def updateRequestStatusVet(request, id):
     task = SurgicalOperationsRequest.objects.get(id=id)
