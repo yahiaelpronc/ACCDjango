@@ -448,7 +448,7 @@ def updateOperationStatusUser(request, id):
         yearDiff=int(thisyear)-myyear
         monthDiff=int(thismonth)-mymonth
         dayDiff=int(thisday)-myday
-        if(yearDiff == 0 and monthDiff == 0 and dayDiff == 0):
+        if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
             print("errrrrrrrror")
             return Response("you cant decline before 24 hours")
 
@@ -476,7 +476,7 @@ def updateOperationStatusVet(request, id):
         yearDiff=int(thisyear)-myyear
         monthDiff=int(thismonth)-mymonth
         dayDiff=int(thisday)-myday
-        if(yearDiff == 0 and monthDiff == 0 and dayDiff == 0):
+        if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
             print("errrrrrrrror")
             return Response("you cant decline before 24 hours")
     serializer = SurOperationStatusVetSerializer(
