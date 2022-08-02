@@ -441,15 +441,16 @@ def updateOperationStatusUser(request, id):
     myday=mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate=task.date
-    thisyear=thisdate.split("-")[0]
-    thismonth=thisdate.split("-")[1]
-    thisday=thisdate.split("-")[2]
-    yearDiff=int(thisyear)-myyear
-    monthDiff=int(thismonth)-mymonth
-    dayDiff=int(thisday)-myday
-    if(yearDiff == 0 or monthDiff == 0 or dayDiff == 0):
-        print("errrrrrrrror")
-        return Response("you cant decline before 24 hours")
+    if(len(thisdate) > 5):
+        thisyear=thisdate.split("-")[0]
+        thismonth=thisdate.split("-")[1]
+        thisday=thisdate.split("-")[2]
+        yearDiff=int(thisyear)-myyear
+        monthDiff=int(thismonth)-mymonth
+        dayDiff=int(thisday)-myday
+        if(yearDiff == 0 and monthDiff == 0 and dayDiff == 0):
+            print("errrrrrrrror")
+            return Response("you cant decline before 24 hours")
 
     serializer = SurOprationStatusUserSerializer(
         instance=task, data=request.data)
@@ -467,15 +468,17 @@ def updateOperationStatusVet(request, id):
     myday=mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate=task.date
-    thisyear=thisdate.split("-")[0]
-    thismonth=thisdate.split("-")[1]
-    thisday=thisdate.split("-")[2]
-    yearDiff=int(thisyear)-myyear
-    monthDiff=int(thismonth)-mymonth
-    dayDiff=int(thisday)-myday
-    if(yearDiff == 0 or monthDiff == 0 or dayDiff == 0):
-        print("errrrrrrrror")
-        return Response("you cant decline before 24 hours")
+    if(len(thisdate) > 5):
+
+        thisyear=thisdate.split("-")[0]
+        thismonth=thisdate.split("-")[1]
+        thisday=thisdate.split("-")[2]
+        yearDiff=int(thisyear)-myyear
+        monthDiff=int(thismonth)-mymonth
+        dayDiff=int(thisday)-myday
+        if(yearDiff == 0 and monthDiff == 0 and dayDiff == 0):
+            print("errrrrrrrror")
+            return Response("you cant decline before 24 hours")
     serializer = SurOperationStatusVetSerializer(
         instance=task, data=request.data)
     if(serializer.is_valid()):
