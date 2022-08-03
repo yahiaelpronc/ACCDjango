@@ -136,6 +136,8 @@ class SurgicalOperations(models.Model):
 
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+    reasonUser=models.CharField(max_length=300, null=False, default="")
+    reasonVet=models.CharField(max_length=300, null=False, default="")
 
 
 class ServiseRequest(models.Model):
@@ -152,5 +154,14 @@ class ServiseRequest(models.Model):
         max_length=30, null=False, choices=(('cat', 'cat'), ('dog', 'dog'), ('cow', 'cow')))
     statusOwner = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
-    statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
+    statusUser = models.CharField(max_length=30, null=True, blank=True, default='accepted', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
+    reasonUser=models.CharField(max_length=300, null=False, default="")
+    reasonVet=models.CharField(max_length=300, null=False, default="")
+
+
+class Notifications(models.Model):
+    receiver = models.CharField(max_length=30, null=False)
+    type = models.CharField(
+        max_length=30, null=False, choices=(('service', 'service'), ('medication', 'medication'), ('surgery', 'surgery')))
+    message = models.CharField(max_length=300, default="")
