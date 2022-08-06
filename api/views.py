@@ -423,6 +423,8 @@ def getSurgicalOperations(request, owner):
             for ele in myResponses:
                 if ele not in myResponses2:
                     myResponses3.append(ele)
+        else:
+            myResponses3.append(i)
 
     if(len(myResponses3) != 0):
         mydata = SurgicalOperationsSerializer(myResponses3, many=True)
@@ -654,6 +656,8 @@ def getSurgery(request, VetName):
                 if ele not in myResponses2:
                     print("3")
                     myResponses3.append(ele)
+        else:
+            myResponses3.append(i)
     print("4")
     if(len(myResponses3) != 0):
         mydata = SurgicalOperationsSerializer(myResponses3, many=True)
