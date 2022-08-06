@@ -403,6 +403,7 @@ def getServicesResponses(request, username):
 def getSurgicalOperations(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
     myResponses2 = []
+    myResponses3 = []
     for i in myResponses:
         if(len(i.date) > 5):
             thisdate = i.date
@@ -419,7 +420,6 @@ def getSurgicalOperations(request, owner):
             if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
                 myResponses2.append(i)
 
-            myResponses3 = []
             for ele in myResponses:
                 if ele not in myResponses2:
                     myResponses3.append(ele)
