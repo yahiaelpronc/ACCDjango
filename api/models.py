@@ -1,3 +1,4 @@
+
 from django.db import models
 from datetime import datetime
 
@@ -126,9 +127,9 @@ class SurgicalOperations(models.Model):
     animalName = models.CharField(max_length=30, null=True, blank=True)
     owner = models.CharField(max_length=30, null=False)
     vetName = models.CharField(max_length=30, null=False)
-    operationName = models.CharField(max_length=30, null=False, default="")
-    date = models.CharField(max_length=30, null=False, default="")
-    price = models.IntegerField(null=False, default=0)
+    operationName = models.CharField(max_length=30, null=True, default="",blank=True)
+    date = models.CharField(max_length=30, null=True, default="",blank=True)
+    price = models.IntegerField(null=True, default=0,blank=True)
 
     message = models.CharField(max_length=300, null=False, default="")
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
@@ -136,8 +137,8 @@ class SurgicalOperations(models.Model):
 
     statusVet = models.CharField(max_length=30, null=True, blank=True, default='pending', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
-    reasonUser=models.CharField(max_length=300, null=False, default="")
-    reasonVet=models.CharField(max_length=300, null=False, default="")
+    reasonUser=models.CharField(max_length=300, null=True, default="",blank=True)
+    reasonVet=models.CharField(max_length=300, null=True, default="",blank=True)
 
 
 class ServiseRequest(models.Model):
@@ -156,8 +157,8 @@ class ServiseRequest(models.Model):
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
     statusUser = models.CharField(max_length=30, null=True, blank=True, default='accepted', choices=(
         ('accepted', 'accepted'), ('pending', 'pending'), ('declined', 'declined')))
-    reasonUser=models.CharField(max_length=300, null=False, default="")
-    reasonVet=models.CharField(max_length=300, null=False, default="")
+    reasonUser=models.CharField(max_length=300, null=True, default="",blank=True)
+    reasonVet=models.CharField(max_length=300, null=True, default="",blank=True)
 
 
 class Notifications(models.Model):

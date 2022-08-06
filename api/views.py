@@ -404,8 +404,11 @@ def getSurgicalOperations(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
     myResponses2 = []
     myResponses3 = []
+    x=1
     for i in myResponses:
-        if(len(i.date) > 5):
+        print(x)
+        x=x+1
+        if((i.date != None)):
             thisdate = i.date
             mydate = datetime.now()
             myyear = mydate.year
@@ -417,18 +420,19 @@ def getSurgicalOperations(request, owner):
             yearDiff = int(thisyear)-myyear
             monthDiff = int(thismonth)-mymonth
             dayDiff = int(thisday)-myday
-            if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
+            if(yearDiff > 0 or (yearDiff == 0 and monthDiff > 0) or (monthDiff == 0 and dayDiff > 0)):
                 myResponses2.append(i)
 
             for ele in myResponses:
                 if ele not in myResponses2:
                     myResponses3.append(ele)
         else:
-            myResponses3.append(i)
+            myResponses2.append(i)
 
-    if(len(myResponses3) != 0):
-        mydata = SurgicalOperationsSerializer(myResponses3, many=True)
-        print(mydata.data)
+    if(len(myResponses2) != 0):
+        mydata = SurgicalOperationsSerializer(myResponses2, many=True)
+
+        print(len(myResponses2))
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -465,21 +469,32 @@ def updateOperationStatusUser(request, id):
     myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
-    if(len(thisdate) > 5):
-        thisyear = thisdate.split("-")[0]
-        thismonth = thisdate.split("-")[1]
-        thisday = thisdate.split("-")[2]
-        yearDiff = int(thisyear)-myyear
-        monthDiff = int(thismonth)-mymonth
-        dayDiff = int(thisday)-myday
-        if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
-            print("errrrrrrrror")
-            return Response("you cant decline before 24 hours")
-    serializer = SurOprationStatusUserSerializer(
+    if(thisdate == None):
+        serializer = SurOprationStatusUserSerializer(
         instance=task, data=request.data)
-    if(serializer.is_valid()):
-        serializer.save()
-    return Response(serializer.data)
+        if(serializer.is_valid()):
+            serializer.save()
+        return Response(serializer.data)
+
+    else:
+
+        if(len(thisdate) > 5):
+            thisyear = thisdate.split("-")[0]
+            thismonth = thisdate.split("-")[1]
+            thisday = thisdate.split("-")[2]
+            yearDiff = int(thisyear)-myyear
+            monthDiff = int(thismonth)-mymonth
+            dayDiff = int(thisday)-myday
+            if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
+                print("errrrrrrrror")
+                return Response("you cant decline before 24 hours")
+            serializer = SurOprationStatusUserSerializer(
+            instance=task, data=request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+            return Response(serializer.data)
+            
+
 
 
 # update status vet of surgery Operation by id
@@ -491,25 +506,35 @@ def updateOperationStatusVet(request, id):
     myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
-    if(len(thisdate) > 5):
-
+    if(thisdate == None):
+        serializer = SurOperationStatusVetSerializer(
+            instance=task, data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+        return Response(serializer.data)
+    else:
         thisyear = thisdate.split("-")[0]
         thismonth = thisdate.split("-")[1]
         thisday = thisdate.split("-")[2]
+
         yearDiff = int(thisyear)-myyear
         monthDiff = int(thismonth)-mymonth
         dayDiff = int(thisday)-myday
+        print("here is ",yearDiff,",",monthDiff,",",dayDiff)
         if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
             print("errrrrrrrror")
             return Response("you cant decline before 24 hours")
-        if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
-            return Response("date passed")
+        else:
 
-    serializer = SurOperationStatusVetSerializer(
-        instance=task, data=request.data)
-    if(serializer.is_valid()):
-        serializer.save()
-    return Response(serializer.data)
+            serializer = SurOperationStatusVetSerializer(
+                instance=task, data=request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 @api_view(['POST'])
@@ -635,7 +660,7 @@ def getSurgery(request, VetName):
     myResponses3 = []
     for i in mySurgeries:
         print("0")
-        if(len(i.date) > 5):
+        if((i.date != None) and (len(i.date) > 5)):
             print("1")
             thisdate = i.date
             mydate = datetime.now()
@@ -648,7 +673,7 @@ def getSurgery(request, VetName):
             yearDiff = int(thisyear)-myyear
             monthDiff = int(thismonth)-mymonth
             dayDiff = int(thisday)-myday
-            if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
+            if(yearDiff > 0 or (yearDiff == 0 and monthDiff > 0) or (monthDiff == 0 and dayDiff > 0)):
                 myResponses2.append(i)
 
             for ele in mySurgeries:
@@ -657,10 +682,10 @@ def getSurgery(request, VetName):
                     print("3")
                     myResponses3.append(ele)
         else:
-            myResponses3.append(i)
+            myResponses2.append(i)
     print("4")
-    if(len(myResponses3) != 0):
-        mydata = SurgicalOperationsSerializer(myResponses3, many=True)
+    if(len(myResponses2) != 0):
+        mydata = SurgicalOperationsSerializer(myResponses2, many=True)
         print(mydata.data)
         return Response(mydata.data)
     else:
