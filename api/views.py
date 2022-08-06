@@ -628,9 +628,13 @@ def getMedication(request, animalName):
 def getSurgery(request, VetName):
 
     mySurgeries = SurgicalOperations.objects.filter(vetName=VetName)
+    print(mySurgeries)
     myResponses2 = []
+    myResponses3 = []
     for i in mySurgeries:
+        print("0")
         if(len(i.date) > 5):
+            print("1")
             thisdate = i.date
             mydate = datetime.now()
             myyear = mydate.year
@@ -645,10 +649,12 @@ def getSurgery(request, VetName):
             if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
                 myResponses2.append(i)
 
-            myResponses3 = []
             for ele in mySurgeries:
+                print("2")
                 if ele not in myResponses2:
+                    print("3")
                     myResponses3.append(ele)
+    print("4")
     if(len(myResponses3) != 0):
         mydata = SurgicalOperationsSerializer(myResponses3, many=True)
         print(mydata.data)
