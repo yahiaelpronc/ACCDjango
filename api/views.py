@@ -404,11 +404,12 @@ def getSurgicalOperations(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
     myResponses2 = []
     myResponses3 = []
-    x=1
+    x = 1
     for i in myResponses:
         print(x)
-        x=x+1
-        if((i.date != None)):
+        print("THIS DATE ", i.date == "")
+        x = x+1
+        if((i.date != "")):
             thisdate = i.date
             mydate = datetime.now()
             myyear = mydate.year
@@ -422,7 +423,6 @@ def getSurgicalOperations(request, owner):
             dayDiff = int(thisday)-myday
             if(yearDiff > 0 or (yearDiff == 0 and monthDiff > 0) or (monthDiff == 0 and dayDiff > 0)):
                 myResponses2.append(i)
-
             for ele in myResponses:
                 if ele not in myResponses2:
                     myResponses3.append(ele)
@@ -469,9 +469,9 @@ def updateOperationStatusUser(request, id):
     myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
-    if(thisdate == None):
+    if(thisdate == ""):
         serializer = SurOprationStatusUserSerializer(
-        instance=task, data=request.data)
+            instance=task, data=request.data)
         if(serializer.is_valid()):
             serializer.save()
         return Response(serializer.data)
@@ -489,12 +489,10 @@ def updateOperationStatusUser(request, id):
                 print("errrrrrrrror")
                 return Response("you cant decline before 24 hours")
             serializer = SurOprationStatusUserSerializer(
-            instance=task, data=request.data)
+                instance=task, data=request.data)
             if(serializer.is_valid()):
                 serializer.save()
             return Response(serializer.data)
-            
-
 
 
 # update status vet of surgery Operation by id
@@ -506,7 +504,8 @@ def updateOperationStatusVet(request, id):
     myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
-    if(thisdate == None):
+    print("THIS DATE ", thisdate)
+    if(thisdate == ""):
         serializer = SurOperationStatusVetSerializer(
             instance=task, data=request.data)
         if(serializer.is_valid()):
@@ -516,11 +515,10 @@ def updateOperationStatusVet(request, id):
         thisyear = thisdate.split("-")[0]
         thismonth = thisdate.split("-")[1]
         thisday = thisdate.split("-")[2]
-
         yearDiff = int(thisyear)-myyear
         monthDiff = int(thismonth)-mymonth
         dayDiff = int(thisday)-myday
-        print("here is ",yearDiff,",",monthDiff,",",dayDiff)
+        print("here is ", yearDiff, ",", monthDiff, ",", dayDiff)
         if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
             print("errrrrrrrror")
             return Response("you cant decline before 24 hours")
@@ -533,8 +531,6 @@ def updateOperationStatusVet(request, id):
                 return Response(serializer.data)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-
-
 
 
 @api_view(['POST'])
@@ -567,7 +563,6 @@ def updateSrviceStatusUser(request, id):
 # update status service Request for Owner
 @api_view(['POST'])
 def updateSrviceStatusOwner(request, id):
-
     task = ServiseRequest.objects.get(id=id)
     serializer = ServiceStatusOwnerSerializer(
         instance=task, data=request.data)
@@ -660,7 +655,7 @@ def getSurgery(request, VetName):
     myResponses3 = []
     for i in mySurgeries:
         print("0")
-        if((i.date != None) and (len(i.date) > 5)):
+        if((i.date != "") and (len(i.date) > 5)):
             print("1")
             thisdate = i.date
             mydate = datetime.now()
