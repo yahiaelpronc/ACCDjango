@@ -29,7 +29,7 @@ urlpatterns = [
     path('loginUser/<str:username>/<str:password>', loginUser),
     path('listAnimals/<str:username>', listAnimals),
     path('insertAnimal/', insertAnimal),
-    path('insertLocation/', insertLocation),
+    path('insertLocation/<str:type>/', insertLocation),
     path('insertUser/', insertuser),
     path('insertVet/', insertVet),
     path('insertRequest/', insertRequest),

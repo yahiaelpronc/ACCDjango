@@ -402,32 +402,37 @@ def getServicesResponses(request, username):
 @api_view(['GET'])
 def getSurgicalOperations(request, owner):
     myResponses = SurgicalOperations.objects.filter(owner=owner)
-    myResponses2=[]
-    for i in myResponses :
-        if(len(i.date) > 5):
-            thisdate=i.date
+    myResponses2 = []
+    myResponses3 = []
+    x=1
+    for i in myResponses:
+        print(x)
+        x=x+1
+        if((i.date != "" and len(i.date) > 5)):
+            thisdate = i.date
             mydate = datetime.now()
-            myyear=mydate.year
-            mymonth=mydate.month
-            myday=mydate.day
-            thisyear=thisdate.split("-")[0]
-            thismonth=thisdate.split("-")[1]
-            thisday=thisdate.split("-")[2]
-            yearDiff=int(thisyear)-myyear
-            monthDiff=int(thismonth)-mymonth
-            dayDiff=int(thisday)-myday
-            if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
+            myyear = mydate.year
+            mymonth = mydate.month
+            myday = mydate.day
+            thisyear = thisdate.split("-")[0]
+            thismonth = thisdate.split("-")[1]
+            thisday = thisdate.split("-")[2]
+            yearDiff = int(thisyear)-myyear
+            monthDiff = int(thismonth)-mymonth
+            dayDiff = int(thisday)-myday
+            if(yearDiff > 0 or (yearDiff == 0 and monthDiff > 0) or (monthDiff == 0 and dayDiff > 0)):
                 myResponses2.append(i)
 
-            myResponses3=[]
             for ele in myResponses:
                 if ele not in myResponses2:
                     myResponses3.append(ele)
-        
+        else:
+            myResponses2.append(i)
 
-    if(len(myResponses3) != 0):
-        mydata = SurgicalOperationsSerializer(myResponses3, many=True)
-        print(mydata.data)
+    if(len(myResponses2) != 0):
+        mydata = SurgicalOperationsSerializer(myResponses2, many=True)
+
+        print(len(myResponses2))
         return Response(mydata.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -459,56 +464,78 @@ def updateRequestStatusUser(request, id):
 @api_view(['POST'])
 def updateOperationStatusUser(request, id):
     mydate = datetime.now()
-    myyear=mydate.year
-    mymonth=mydate.month
-    myday=mydate.day
+    myyear = mydate.year
+    mymonth = mydate.month
+    myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
-    thisdate=task.date
-    if(len(thisdate) > 5):
-        thisyear=thisdate.split("-")[0]
-        thismonth=thisdate.split("-")[1]
-        thisday=thisdate.split("-")[2]
-        yearDiff=int(thisyear)-myyear
-        monthDiff=int(thismonth)-mymonth
-        dayDiff=int(thisday)-myday
-        if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
-            print("errrrrrrrror")
-            return Response("you cant decline before 24 hours")
-    serializer = SurOprationStatusUserSerializer(
+    thisdate = task.date
+    if(thisdate == None or thisdate == ""):
+        serializer = SurOprationStatusUserSerializer(
         instance=task, data=request.data)
-    if(serializer.is_valid()):
-        serializer.save()
-    return Response(serializer.data)
+        if(serializer.is_valid()):
+            serializer.save()
+        return Response(serializer.data)
+
+    else:
+
+        if(len(thisdate) > 5):
+            thisyear = thisdate.split("-")[0]
+            thismonth = thisdate.split("-")[1]
+            thisday = thisdate.split("-")[2]
+            yearDiff = int(thisyear)-myyear
+            monthDiff = int(thismonth)-mymonth
+            dayDiff = int(thisday)-myday
+            if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
+                print("errrrrrrrror")
+                return Response("you cant decline before 24 hours")
+            serializer = SurOprationStatusUserSerializer(
+            instance=task, data=request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+            return Response(serializer.data)
+            
+
 
 
 # update status vet of surgery Operation by id
 @api_view(['POST'])
 def updateOperationStatusVet(request, id):
     mydate = datetime.now()
-    myyear=mydate.year
-    mymonth=mydate.month
-    myday=mydate.day
+    myyear = mydate.year
+    mymonth = mydate.month
+    myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
-    thisdate=task.date
-    if(len(thisdate) > 5):
+    thisdate = task.date
+    print("this date is ",thisdate)
+    if(thisdate == None or thisdate == ""):
+        serializer = SurOperationStatusVetSerializer(
+            instance=task, data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        thisyear = thisdate.split("-")[0]
+        thismonth = thisdate.split("-")[1]
+        thisday = thisdate.split("-")[2]
 
-        thisyear=thisdate.split("-")[0]
-        thismonth=thisdate.split("-")[1]
-        thisday=thisdate.split("-")[2]
-        yearDiff=int(thisyear)-myyear
-        monthDiff=int(thismonth)-mymonth
-        dayDiff=int(thisday)-myday
+        yearDiff = int(thisyear)-myyear
+        monthDiff = int(thismonth)-mymonth
+        dayDiff = int(thisday)-myday
+        print("here is ",yearDiff,",",monthDiff,",",dayDiff)
         if(yearDiff <= 0 and monthDiff <= 0 and dayDiff <= 1):
             print("errrrrrrrror")
             return Response("you cant decline before 24 hours")
-        if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0 ) or (monthDiff == 0 and dayDiff < 0)):
-            return Response("date passed")
+        else:
 
-    serializer = SurOperationStatusVetSerializer(
-        instance=task, data=request.data)
-    if(serializer.is_valid()):
-        serializer.save()
-    return Response(serializer.data)
+            serializer = SurOperationStatusVetSerializer(
+                instance=task, data=request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 @api_view(['POST'])
@@ -541,7 +568,7 @@ def updateSrviceStatusUser(request, id):
 # update status service Request for Owner
 @api_view(['POST'])
 def updateSrviceStatusOwner(request, id):
-  
+
     task = ServiseRequest.objects.get(id=id)
     serializer = ServiceStatusOwnerSerializer(
         instance=task, data=request.data)
@@ -629,29 +656,37 @@ def getMedication(request, animalName):
 def getSurgery(request, VetName):
 
     mySurgeries = SurgicalOperations.objects.filter(vetName=VetName)
-    myResponses2=[]
-    for i in mySurgeries :
-        if(len(i.date) > 5):
-            thisdate=i.date
+    print(mySurgeries)
+    myResponses2 = []
+    myResponses3 = []
+    for i in mySurgeries:
+        print("0")
+        if((i.date != "") and (len(i.date) > 5)):
+            print("1")
+            thisdate = i.date
             mydate = datetime.now()
-            myyear=mydate.year
-            mymonth=mydate.month
-            myday=mydate.day
-            thisyear=thisdate.split("-")[0]
-            thismonth=thisdate.split("-")[1]
-            thisday=thisdate.split("-")[2]
-            yearDiff=int(thisyear)-myyear
-            monthDiff=int(thismonth)-mymonth
-            dayDiff=int(thisday)-myday
-            if(yearDiff < 0 or (yearDiff == 0 and monthDiff < 0) or (monthDiff == 0 and dayDiff < 0)):
+            myyear = mydate.year
+            mymonth = mydate.month
+            myday = mydate.day
+            thisyear = thisdate.split("-")[0]
+            thismonth = thisdate.split("-")[1]
+            thisday = thisdate.split("-")[2]
+            yearDiff = int(thisyear)-myyear
+            monthDiff = int(thismonth)-mymonth
+            dayDiff = int(thisday)-myday
+            if(yearDiff > 0 or (yearDiff == 0 and monthDiff > 0) or (monthDiff == 0 and dayDiff > 0)):
                 myResponses2.append(i)
 
-            myResponses3=[]
             for ele in mySurgeries:
+                print("2")
                 if ele not in myResponses2:
+                    print("3")
                     myResponses3.append(ele)
-    if(len(myResponses3) != 0):
-        mydata = SurgicalOperationsSerializer(myResponses3, many=True)
+        else:
+            myResponses2.append(i)
+    print("4")
+    if(len(myResponses2) != 0):
+        mydata = SurgicalOperationsSerializer(myResponses2, many=True)
         print(mydata.data)
         return Response(mydata.data)
     else:
@@ -660,34 +695,41 @@ def getSurgery(request, VetName):
 
 # Add Location
 @api_view(['POST'])
-def insertLocation(request):
+def insertLocation(request, type):
     print(request.data)
     if(request.data['work_hours_start'] == ""
        or request.data['work_hours_end_period'] == ""
        or request.data['work_hours_start_period'] == ""
        or request.data['work_hours_start'] == ""):
         return Response("Please Choose Work Hours")
-    print("1")
+    if(type == "default"):
+        return Response("Please Choose An Owner Type")
     if(request.data['governorate'] == ""):
         return Response("Please Choose A Governorate")
     if(request.data['service'] == ""):
         return Response("Please Choose A Service")
-    print("1")
     if(locations.objects.filter(name=request.data['name']).exists()):
         return Response("A Location With This Name Already Exists")
     if(locations.objects.filter(email=request.data['email']).exists()):
         return Response("Email Already Exists")
-    print("1")
     mydata = LocationsSerializer(data=request.data)
-    if(mydata.is_valid()):
-        mydata.save()
-        myUser = Myuser.objects.get(username=request.data['owner'])
-        myUser.isOwner = True
-        myUser.save()
-        print(mydata.data)
-        return Response(mydata.data)
+    if(type == "user"):
+        if(mydata.is_valid()):
+            mydata.save()
+            myUser = Myuser.objects.get(username=request.data['owner'])
+            myUser.isOwner = True
+            myUser.save()
+            print(mydata.data)
+            return Response(mydata.data)
     else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        if(mydata.is_valid()):
+            mydata.save()
+            myUser = Vet.objects.get(username=request.data['owner'])
+            myUser.isOwner = True
+            myUser.save()
+            print(mydata.data)
+            return Response(mydata.data)
+    return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 # register user
