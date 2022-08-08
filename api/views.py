@@ -407,9 +407,10 @@ def getSurgicalOperations(request, owner):
     x = 1
     for i in myResponses:
         print(x)
-        print("THIS DATE ", i.date == "")
         x = x+1
-        if((i.date != "")):
+        if((i.date != "") and (i.date != None)):
+            print("THIS DATE ", i.date )
+
             thisdate = i.date
             mydate = datetime.now()
             myyear = mydate.year
@@ -469,7 +470,7 @@ def updateOperationStatusUser(request, id):
     myday = mydate.day
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
-    if(thisdate == ""):
+    if(thisdate == "" or thisdate == None):
         serializer = SurOprationStatusUserSerializer(
             instance=task, data=request.data)
         if(serializer.is_valid()):
@@ -505,7 +506,7 @@ def updateOperationStatusVet(request, id):
     task = SurgicalOperations.objects.get(id=id)
     thisdate = task.date
     print("THIS DATE ", thisdate)
-    if(thisdate == ""):
+    if(thisdate == "" or thisdate == None):
         serializer = SurOperationStatusVetSerializer(
             instance=task, data=request.data)
         if(serializer.is_valid()):
@@ -655,7 +656,7 @@ def getSurgery(request, VetName):
     myResponses3 = []
     for i in mySurgeries:
         print("0")
-        if((i.date != "") and (len(i.date) > 5)):
+        if((i.date != "") and (i.date != None)):
             print("1")
             thisdate = i.date
             mydate = datetime.now()
