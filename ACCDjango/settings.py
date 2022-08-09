@@ -90,7 +90,7 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'postgres',
         'PASSWORD': '123456',
-        'PORT': '5433'
+        'PORT': '5432'
     }
 }
 
@@ -152,7 +152,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/'
 MEDIA_ROOT = os.path.join(
     'C:/Users/fouad/Desktop/acc-react/src/media/profileImages')
-# 'G:/Work/GithubRepos/new_ACC/acc-react/src/media/profileImages')
+    # 'G:/Work/GithubRepos/new_ACC/acc-react/src/media/profileImages')
 # 'D:/programming/ITI/ProjectITIFinal/acc-react/src/media/profileImages')
 # D:/programming/ITI/ProjectITIFinal/
 # D:/programming/ITI/ProjectITIFinal/acc-react/src/media/profileImages
