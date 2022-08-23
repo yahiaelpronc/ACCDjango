@@ -151,7 +151,7 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/'
 MEDIA_ROOT = os.path.join(
-    'C:/Users/fouad/Desktop/acc-react/src/media/profileImages')
+    'C:\\Users\\Dr Mohammed\\Desktop\\finalproject\\ACCDjango')
 # 'G:/Work/GithubRepos/new_ACC/acc-react/src/media/profileImages')
 # 'D:/programming/ITI/ProjectITIFinal/acc-react/src/media/profileImages')
 # D:/programming/ITI/ProjectITIFinal/
